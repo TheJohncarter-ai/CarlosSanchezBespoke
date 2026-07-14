@@ -38,10 +38,13 @@
   let lang = LANGS.includes(urlLang) ? urlLang : (load("csb-lang") || "en");
   const measurements = load("csb-meas") || {}; // stored keyed by field, values in the CURRENT unit
 
-  const MEAS_FIELDS = [
-    "neck", "chest", "waist", "hips", "shoulders", "sleeve",
-    "jacketLength", "wrist", "thigh", "inseam", "outseam", "height"
+  // grouped per garment (progressive disclosure — jacket vs trousers)
+  const MEAS_GROUPS = [
+    { key: "jacket", fields: ["neck", "chest", "waist", "shoulders", "sleeve", "jacketLength", "wrist"] },
+    { key: "trousers", fields: ["trouserWaist", "hips", "thigh", "inseam", "outseam"] },
+    { key: "general", fields: ["height"] }
   ];
+  const MEAS_FIELDS = MEAS_GROUPS.flatMap((g) => g.fields);
 
   const CLOTH = {
     navy:     { base: "#22304d", dark: "#182339", light: "#2e3f63" },
@@ -430,10 +433,11 @@
   function renderMeasurements() {
     const grid = $("#measGrid");
     if (!grid) return;
-    grid.innerHTML = MEAS_FIELDS.map((f) => {
-      const val = measurements[f] != null ? measurements[f] : "";
-      const cm = toCm(val);
-      return `
+    grid.innerHTML = MEAS_GROUPS.map((group) => {
+      const rows = group.fields.map((f) => {
+        const val = measurements[f] != null ? measurements[f] : "";
+        const cm = toCm(val);
+        return `
         <div class="meas-row">
           <div class="meas-label">
             ${t("meas." + f)}
@@ -447,6 +451,8 @@
             ${cm == null ? "— cm" : `${fmt(cm)} <span class="unit">cm</span>`}
           </div>
         </div>`;
+      }).join("");
+      return `<h3 class="meas-group-title">${t("meas.group." + group.key)}</h3>${rows}`;
     }).join("");
 
     $all(".meas-input", grid).forEach((input) => {

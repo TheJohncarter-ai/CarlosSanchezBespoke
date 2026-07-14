@@ -473,6 +473,33 @@ img, svg { max-width: 100%; display: block; }
 
 .unit-btn.active { background: var(--ink); color: var(--paper); }
 
+.meas-tips {
+  max-width: 46rem;
+  background: #fff;
+  border-left: 3px solid var(--gold);
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 0.95rem 1.2rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-bottom: 2rem;
+}
+
+.meas-group-title {
+  grid-column: 1 / -1;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+.meas-group-title:first-child { margin-top: 0; }
+
 .meas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
