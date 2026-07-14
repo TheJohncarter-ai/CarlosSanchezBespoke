@@ -20,13 +20,25 @@ in a browser, or serve the folder with any static host (GitHub Pages, Netlify, e
 - **Quote request** — the contact form composes an email that includes the suit
   design and converted measurements.
 
+## Brand system
+
+Drawn from the Carlos Sanchez "A la Medida" identity (CS crest):
+
+- **Colors** — deep navy `#0a1424`/`#101f3c`, royal sapphire `#2f5fd0`,
+  periwinkle `#9db8f0`, platinum silver `#c6cedd`, cool paper `#f6f7fa`.
+- **Type** — Cormorant Garamond (display serif) + Jost (letterspaced
+  geometric sans), self-hosted in `assets/fonts/` — no third-party requests.
+- **Crest** — `assets/crest.svg`, used in the header and favicon.
+
 ## Structure
 
 ```
-index.html      — single-page site (hero, atelier, customizer, measurements, contact)
+index.html      — single-page site (hero, atelier, gallery, customizer, measurements, FAQ, contact)
 css/styles.css  — all styling, responsive + reduced-motion support
+css/fonts.css   — self-hosted @font-face declarations
 js/i18n.js      — EN/ES/FR/IT translation dictionaries
-js/app.js       — preloader, i18n, customizer + SVG preview, unit conversion, form
+js/app.js       — preloader, i18n, customizer + SVG preview, unit conversion, gallery lightbox, form
+assets/         — crest, favicon, social image, gallery photos, fonts
 ```
 
 ## Local preview

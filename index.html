@@ -8,7 +8,7 @@
   <title id="metaTitle">Bespoke Tailor in Medellín, Colombia | Carlos Sanchez Bespoke — Custom Suits</title>
   <meta id="metaDescription" name="description" content="Carlos Sanchez Bespoke — handcrafted bespoke suits from Medellín, Colombia. Design every detail of your custom suit online, enter your measurements in inches or centimetres, and request a quote. English, Spanish, French and Italian service." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="theme-color" content="#131a2a" />
+  <meta name="theme-color" content="#0a1424" />
   <meta name="geo.region" content="CO-ANT" />
   <meta name="geo.placename" content="Medellín" />
   <link id="canonicalLink" rel="canonical" href="https://carlossanchezbespoke.com/" />
@@ -41,6 +41,11 @@
   <meta name="twitter:title" content="Carlos Sanchez Bespoke — Custom Suits, Handmade in Medellín" />
   <meta name="twitter:description" content="Design every detail of your bespoke suit online and submit your measurements. Handcrafted in Medellín, Colombia." />
   <meta name="twitter:image" content="https://carlossanchezbespoke.com/assets/og-image.png" />
+
+  <!-- Brand typography (self-hosted — no third-party requests) -->
+  <link rel="preload" href="assets/fonts/CormorantGaramond-600-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/Jost-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/fonts.css" />
 
   <link rel="stylesheet" href="css/styles.css" />
 
@@ -136,18 +141,18 @@
       <svg class="pre-svg" viewBox="0 0 260 170" role="img" aria-label="Loading">
         <!-- monogram ring, draws itself -->
         <circle class="pre-ring" cx="130" cy="62" r="46" fill="none"
-                stroke="#d4b76a" stroke-width="1.5"
+                stroke="#c6cedd" stroke-width="1.5"
                 stroke-dasharray="290" stroke-dashoffset="290"
                 transform="rotate(-90 130 62)"/>
         <text class="pre-mono" x="130" y="76" text-anchor="middle"
-              font-family="Georgia, serif" font-size="38" letter-spacing="4"
-              fill="#d4b76a">CS</text>
+              font-family="Cormorant Garamond, Georgia, serif" font-weight="600"
+              font-size="40" letter-spacing="4" fill="#e8ebf1">CS</text>
         <!-- stitch guide line -->
         <path id="stitchPath" d="M18 140 H242" fill="none"
-              stroke="rgba(212,183,106,0.25)" stroke-width="1"/>
+              stroke="rgba(157,184,240,0.25)" stroke-width="1"/>
         <!-- sewn thread, draws along the guide -->
         <path class="pre-thread" d="M18 140 H242" fill="none"
-              stroke="#d4b76a" stroke-width="1.6"
+              stroke="#4a7ae0" stroke-width="1.6"
               stroke-dasharray="7 5" stroke-dashoffset="224"/>
         <!-- needle travelling along the stitch -->
         <g class="pre-needle">
@@ -173,7 +178,7 @@
   <header class="site-header" id="top">
     <div class="header-inner">
       <a href="#top" class="brand">
-        <span class="brand-mark">CS</span>
+        <img class="brand-crest" src="assets/crest.svg" alt="Carlos Sanchez crest" width="46" height="54" />
         <span class="brand-text">
           <span class="brand-name">Carlos Sanchez</span>
           <span class="brand-sub" data-i18n="brand.tagline">Bespoke Tailoring · Medellín</span>
@@ -210,7 +215,7 @@
         silhouette, every detail chosen by you.
       </p>
       <div class="hero-cta">
-        <a href="#customize" class="btn btn-gold" data-i18n="hero.cta1">Design Your Suit</a>
+        <a href="#customize" class="btn btn-primary" data-i18n="hero.cta1">Design Your Suit</a>
         <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Book a Fitting</a>
       </div>
     </div>
@@ -490,7 +495,7 @@
         <aside class="summary-pane">
           <h3 data-i18n="cust.summary">Your design</h3>
           <ul id="summaryList" class="summary-list"></ul>
-          <a href="#measurements" class="btn btn-gold btn-block" data-i18n="cust.next">Next: your measurements ↓</a>
+          <a href="#measurements" class="btn btn-primary btn-block" data-i18n="cust.next">Next: your measurements ↓</a>
         </aside>
       </div>
     </div>
@@ -531,7 +536,7 @@
           tailors in Medellín will work from. Not sure how to measure? Book a video
           fitting and we'll guide you.
         </p>
-        <button class="btn btn-gold" id="copyMeasBtn" data-i18n="meas.copy">Include measurements in my quote request</button>
+        <button class="btn btn-primary" id="copyMeasBtn" data-i18n="meas.copy">Include measurements in my quote request</button>
         <span id="measSaved" class="saved-flag" data-i18n="meas.saved" hidden>Saved ✓</span>
       </div>
     </div>
@@ -607,7 +612,7 @@
             <input type="checkbox" id="attachDesign" checked />
             <span data-i18n="contact.attach">Attach my suit design and measurements</span>
           </label>
-          <button type="submit" class="btn btn-gold btn-block" data-i18n="contact.send">Send quote request</button>
+          <button type="submit" class="btn btn-primary btn-block" data-i18n="contact.send">Send quote request</button>
           <p id="formStatus" class="form-status" hidden></p>
         </form>
       </div>

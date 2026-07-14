@@ -365,8 +365,8 @@
 
     /* monogram */
     if (design.monogram) {
-      svg += `<text x="150" y="414" text-anchor="middle" font-size="13"
-                fill="#d4b76a" font-family="Georgia, serif" font-style="italic"
+      svg += `<text x="150" y="414" text-anchor="middle" font-size="14"
+                fill="#c6cedd" font-family="Cormorant Garamond, Georgia, serif" font-style="italic"
                 letter-spacing="2">${escapeHtml(design.monogram)}</text>`;
     }
 
