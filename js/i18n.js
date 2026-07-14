@@ -10,6 +10,7 @@ const I18N = {
     "brand.tagline": "Bespoke Tailoring · Medellín",
 
     "nav.about": "The Atelier",
+    "nav.gallery": "Gallery",
     "nav.customize": "Design Your Suit",
     "nav.measurements": "Measurements",
     "nav.contact": "Contact",
@@ -33,6 +34,17 @@ const I18N = {
     "services.s2.text": "Morning coats, tuxedos and guayabera-inspired formalwear for the most important days.",
     "services.s3.title": "Wardrobe Consulting",
     "services.s3.text": "Travel capsules and seasonal wardrobes built around your life, climate and calendar.",
+
+    "gallery.eyebrow": "From the Atelier",
+    "gallery.title": "Recent work",
+    "gallery.quote": "“Style makes you unique — and so does clothing made to your measure.”",
+    "gallery.c1": "Checked jackets, cut by hand",
+    "gallery.c2": "Double-breasted burgundy, 6×2",
+    "gallery.c3": "From swatch to suit — grey pinstripe",
+    "gallery.c4": "Three-piece suits, made to measure",
+    "gallery.c5": "The workbench — cloth books and thread",
+    "gallery.c6": "Navy blazer, worn easy",
+    "gallery.follow": "Follow the atelier on Instagram",
 
     "cust.eyebrow": "The Design Room",
     "cust.title": "Design your suit",
@@ -156,6 +168,7 @@ const I18N = {
     "brand.tagline": "Sastrería a Medida · Medellín",
 
     "nav.about": "El Atelier",
+    "nav.gallery": "Galería",
     "nav.customize": "Diseña tu Traje",
     "nav.measurements": "Medidas",
     "nav.contact": "Contacto",
@@ -179,6 +192,17 @@ const I18N = {
     "services.s2.text": "Chaqués, esmóquines y ropa formal inspirada en la guayabera para los días más importantes.",
     "services.s3.title": "Asesoría de Guardarropa",
     "services.s3.text": "Cápsulas de viaje y guardarropas de temporada creados según tu vida, tu clima y tu calendario.",
+
+    "gallery.eyebrow": "Desde el Atelier",
+    "gallery.title": "Trabajos recientes",
+    "gallery.quote": "“El estilo te hace único — y tener ropa a la medida, también.”",
+    "gallery.c1": "Sacos de cuadros, cortados a mano",
+    "gallery.c2": "Cruzado vinotinto, 6×2",
+    "gallery.c3": "De la muestra al traje — raya diplomática gris",
+    "gallery.c4": "Trajes de tres piezas, a la medida",
+    "gallery.c5": "La mesa de trabajo — muestrarios e hilo",
+    "gallery.c6": "Blazer azul marino, llevado con soltura",
+    "gallery.follow": "Sigue el atelier en Instagram",
 
     "cust.eyebrow": "La Sala de Diseño",
     "cust.title": "Diseña tu traje",
@@ -302,6 +326,7 @@ const I18N = {
     "brand.tagline": "Tailleur sur Mesure · Medellín",
 
     "nav.about": "L'Atelier",
+    "nav.gallery": "Galerie",
     "nav.customize": "Créez votre Costume",
     "nav.measurements": "Mensurations",
     "nav.contact": "Contact",
@@ -325,6 +350,17 @@ const I18N = {
     "services.s2.text": "Jaquettes, smokings et tenues de cérémonie inspirées de la guayabera pour les jours les plus importants.",
     "services.s3.title": "Conseil en Garde-robe",
     "services.s3.text": "Garde-robes capsules et saisonnières pensées pour votre vie, votre climat et votre agenda.",
+
+    "gallery.eyebrow": "Depuis l'Atelier",
+    "gallery.title": "Travaux récents",
+    "gallery.quote": "« Le style vous rend unique — les vêtements faits à vos mesures aussi. »",
+    "gallery.c1": "Vestes à carreaux, coupées à la main",
+    "gallery.c2": "Croisé bordeaux, 6×2",
+    "gallery.c3": "De l'échantillon au costume — rayures tennis grises",
+    "gallery.c4": "Costumes trois pièces, sur mesure",
+    "gallery.c5": "L'établi — liasses de tissus et fil",
+    "gallery.c6": "Blazer marine, porté décontracté",
+    "gallery.follow": "Suivez l'atelier sur Instagram",
 
     "cust.eyebrow": "Le Salon de Création",
     "cust.title": "Créez votre costume",
@@ -448,6 +484,7 @@ const I18N = {
     "brand.tagline": "Sartoria su Misura · Medellín",
 
     "nav.about": "L'Atelier",
+    "nav.gallery": "Galleria",
     "nav.customize": "Disegna il tuo Abito",
     "nav.measurements": "Misure",
     "nav.contact": "Contatti",
@@ -471,6 +508,17 @@ const I18N = {
     "services.s2.text": "Tight, smoking e abiti da cerimonia ispirati alla guayabera per i giorni più importanti.",
     "services.s3.title": "Consulenza di Guardaroba",
     "services.s3.text": "Guardaroba capsule e stagionali costruiti attorno alla tua vita, al tuo clima e al tuo calendario.",
+
+    "gallery.eyebrow": "Dall'Atelier",
+    "gallery.title": "Lavori recenti",
+    "gallery.quote": "“Lo stile ti rende unico — e anche gli abiti fatti su misura.”",
+    "gallery.c1": "Giacche a quadri, tagliate a mano",
+    "gallery.c2": "Doppiopetto bordeaux, 6×2",
+    "gallery.c3": "Dal campione all'abito — gessato grigio",
+    "gallery.c4": "Abiti tre pezzi, su misura",
+    "gallery.c5": "Il banco di lavoro — campionari e filo",
+    "gallery.c6": "Blazer blu, portato con disinvoltura",
+    "gallery.follow": "Segui l'atelier su Instagram",
 
     "cust.eyebrow": "La Sala di Design",
     "cust.title": "Disegna il tuo abito",

@@ -558,6 +558,32 @@
     );
   }
 
+  function bindLightbox() {
+    const box = $("#lightbox");
+    const img = $("#lightboxImg");
+    if (!box || !img) return;
+
+    $all(".gallery-item").forEach((fig) => {
+      fig.addEventListener("click", () => {
+        const thumb = $("img", fig);
+        img.src = fig.dataset.full || (thumb && thumb.src) || "";
+        img.alt = (thumb && thumb.alt) || "";
+        box.hidden = false;
+        document.body.style.overflow = "hidden";
+      });
+    });
+
+    function close() {
+      box.hidden = true;
+      img.src = "";
+      document.body.style.overflow = "";
+    }
+    box.addEventListener("click", close);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !box.hidden) close();
+    });
+  }
+
   function bindReveal() {
     const observed = $all(".section .container, .hero-inner");
     observed.forEach((el) => el.classList.add("reveal"));
@@ -581,6 +607,7 @@
     bindOptionGroups();
     bindUnitToggle();
     bindForm();
+    bindLightbox();
     bindReveal();
     applyLang(lang);
     renderSuit();

@@ -73,7 +73,7 @@
       "closes": "18:00"
     },
     "knowsLanguage": ["en", "es", "fr", "it"],
-    "sameAs": ["https://www.instagram.com/carlosbespokepty/"],
+    "sameAs": ["https://www.instagram.com/carlossanchezcouture/"],
     "makesOffer": [
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full bespoke suits", "description": "Personal paper pattern, hand cutting, two to three fittings." } },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding and ceremony tailoring", "description": "Morning coats, tuxedos and formalwear made to measure." } },
@@ -182,6 +182,7 @@
 
       <nav class="main-nav" id="mainNav">
         <a href="#about" data-i18n="nav.about">The Atelier</a>
+        <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
         <a href="#customize" data-i18n="nav.customize">Design Your Suit</a>
         <a href="#measurements" data-i18n="nav.measurements">Measurements</a>
         <a href="#contact" data-i18n="nav.contact">Contact</a>
@@ -270,6 +271,63 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="section section-alt" id="gallery">
+    <div class="container">
+      <p class="eyebrow" data-i18n="gallery.eyebrow">From the Atelier</p>
+      <h2 class="section-title" data-i18n="gallery.title">Recent work</h2>
+
+      <blockquote class="brand-quote">
+        <p data-i18n="gallery.quote">"Style makes you unique — and so does clothing made to your measure."</p>
+        <cite>— Carlos Sanchez</cite>
+      </blockquote>
+
+      <div class="gallery-grid">
+        <figure class="gallery-item" data-full="assets/gallery/checked-jackets.jpg">
+          <img src="assets/gallery/checked-jackets.jpg" loading="lazy"
+               alt="Three custom checked sport jackets on mannequins: brown gun-club check, camel windowpane, and blue glen plaid" />
+          <figcaption data-i18n="gallery.c1">Checked jackets, cut by hand</figcaption>
+        </figure>
+        <figure class="gallery-item" data-full="assets/gallery/burgundy-db.jpg">
+          <img src="assets/gallery/burgundy-db.jpg" loading="lazy"
+               alt="Burgundy double-breasted jacket with peak lapels and gold buttons, worn with khaki trousers" />
+          <figcaption data-i18n="gallery.c2">Double-breasted burgundy, 6×2</figcaption>
+        </figure>
+        <figure class="gallery-item" data-full="assets/gallery/pinstripe-db.jpg">
+          <img src="assets/gallery/pinstripe-db.jpg" loading="lazy"
+               alt="Grey pinstripe double-breasted suit beside the pinstripe cloth swatch it was cut from" />
+          <figcaption data-i18n="gallery.c3">From swatch to suit — grey pinstripe</figcaption>
+        </figure>
+        <figure class="gallery-item" data-full="assets/gallery/three-piece.jpg">
+          <img src="assets/gallery/three-piece.jpg" loading="lazy"
+               alt="Blue three-piece suit and brown houndstooth three-piece suit surrounded by fabric swatches" />
+          <figcaption data-i18n="gallery.c4">Three-piece suits, made to measure</figcaption>
+        </figure>
+        <figure class="gallery-item" data-full="assets/gallery/atelier-workbench.jpg">
+          <img src="assets/gallery/atelier-workbench.jpg" loading="lazy"
+               alt="Vintage sewing machine with thread spools, measuring tape, shears and fabric swatch books in the atelier" />
+          <figcaption data-i18n="gallery.c5">The workbench — cloth books and thread</figcaption>
+        </figure>
+        <figure class="gallery-item" data-full="assets/gallery/navy-blazer.jpg">
+          <img src="assets/gallery/navy-blazer.jpg" loading="lazy"
+               alt="Navy blazer worn open over a white shirt with khaki chinos, in front of the Carlos Sanchez crest" />
+          <figcaption data-i18n="gallery.c6">Navy blazer, worn easy</figcaption>
+        </figure>
+      </div>
+
+      <p class="gallery-follow">
+        <span data-i18n="gallery.follow">Follow the atelier on Instagram</span>
+        · <a href="https://www.instagram.com/carlossanchezcouture/" target="_blank" rel="noopener">@carlossanchezcouture</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- lightbox -->
+  <div id="lightbox" class="lightbox" hidden>
+    <button class="lightbox-close" aria-label="Close">×</button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
 
   <!-- ============ CUSTOMIZER ============ -->
   <section class="section section-dark" id="customize">
@@ -560,6 +618,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© 2026 Carlos Sanchez Bespoke · Medellín, Colombia</span>
+      <a class="footer-ig" href="https://www.instagram.com/carlossanchezcouture/" target="_blank" rel="noopener">Instagram · @carlossanchezcouture</a>
       <span data-i18n="footer.made">Hand-cut. Hand-sewn. Hecho en Colombia.</span>
     </div>
   </footer>
