@@ -4,6 +4,9 @@
 
 const I18N = {
   en: {
+    "meta.title": "Bespoke Tailor in Medellín, Colombia | Carlos Sanchez Bespoke — Custom Suits",
+    "meta.description": "Carlos Sanchez Bespoke — handcrafted bespoke suits from Medellín, Colombia. Design every detail of your custom suit online, enter your measurements in inches or centimetres, and request a quote. English, Spanish, French and Italian service.",
+
     "brand.tagline": "Bespoke Tailoring · Medellín",
 
     "nav.about": "The Atelier",
@@ -112,6 +115,19 @@ const I18N = {
     "meas.outseam": "Outseam", "meas.outseam.hint": "Waist to trouser hem",
     "meas.height": "Height", "meas.height.hint": "Without shoes",
 
+    "faq.eyebrow": "Good to know",
+    "faq.title": "Frequently asked questions",
+    "faq.q1": "How long does a bespoke suit take to make?",
+    "faq.a1": "A full bespoke suit typically takes six to eight weeks, including two to three fittings. Rush timelines for weddings and events are possible on request.",
+    "faq.q2": "How much does a bespoke suit cost in Colombia?",
+    "faq.a2": "Pricing depends on the cloth and construction you choose. Bespoke two-piece suits at our Medellín atelier typically start around US$1,200, with fine Italian and English cloths above that. Request a quote with your design for an exact price.",
+    "faq.q3": "Can I order a custom suit remotely from outside Colombia?",
+    "faq.a3": "Yes. You can design your suit online, submit measurements in inches or centimetres (we convert them automatically), and complete fittings by video call. We ship worldwide.",
+    "faq.q4": "How do I take my measurements at home?",
+    "faq.a4": "Use a soft measuring tape over light clothing, keep the tape level and snug but not tight, and follow the guidance next to each field in our measurements form. A second person helps for chest, shoulders and sleeve. You can also book a video fitting and we will guide you live.",
+    "faq.q5": "Do you make wedding suits and tuxedos?",
+    "faq.a5": "Yes — wedding suits, tuxedos, morning coats and ceremony formalwear are a specialty, for grooms and full wedding parties, in Colombia and abroad.",
+
     "contact.eyebrow": "Visit or write",
     "contact.title": "Request your quote",
     "contact.atelier": "The Atelier",
@@ -129,6 +145,9 @@ const I18N = {
   },
 
   es: {
+    "meta.title": "Sastre a Medida en Medellín, Colombia | Carlos Sanchez Bespoke — Trajes a Medida",
+    "meta.description": "Carlos Sanchez Bespoke — trajes a medida hechos a mano en Medellín, Colombia. Diseña cada detalle de tu traje en línea, ingresa tus medidas en pulgadas o centímetros y solicita tu cotización. Atención en español, inglés, francés e italiano.",
+
     "brand.tagline": "Sastrería a Medida · Medellín",
 
     "nav.about": "El Atelier",
@@ -237,6 +256,19 @@ const I18N = {
     "meas.outseam": "Largo exterior", "meas.outseam.hint": "De la cintura al ruedo del pantalón",
     "meas.height": "Estatura", "meas.height.hint": "Sin zapatos",
 
+    "faq.eyebrow": "Bueno saberlo",
+    "faq.title": "Preguntas frecuentes",
+    "faq.q1": "¿Cuánto tarda un traje a medida?",
+    "faq.a1": "Un traje completamente a medida toma normalmente de seis a ocho semanas, incluyendo dos o tres pruebas. Para bodas y eventos podemos acordar tiempos más cortos.",
+    "faq.q2": "¿Cuánto cuesta un traje a medida en Colombia?",
+    "faq.a2": "El precio depende de la tela y la construcción que elijas. Los trajes de dos piezas de nuestro atelier en Medellín parten normalmente de unos US$1.200, con telas italianas e inglesas finas por encima de ese valor. Solicita una cotización con tu diseño para un precio exacto.",
+    "faq.q3": "¿Puedo pedir un traje a medida desde fuera de Colombia?",
+    "faq.a3": "Sí. Puedes diseñar tu traje en línea, enviar tus medidas en pulgadas o centímetros (las convertimos automáticamente) y hacer las pruebas por videollamada. Enviamos a todo el mundo.",
+    "faq.q4": "¿Cómo me tomo las medidas en casa?",
+    "faq.a4": "Usa un metro de costura sobre ropa ligera, mantén la cinta nivelada y ajustada pero sin apretar, y sigue la guía junto a cada campo del formulario de medidas. Una segunda persona ayuda con pecho, hombros y manga. También puedes agendar una prueba por video y te guiamos en vivo.",
+    "faq.q5": "¿Hacen trajes de boda y esmóquines?",
+    "faq.a5": "Sí — los trajes de boda, esmóquines, chaqués y ropa de ceremonia son una especialidad, para novios y cortejos completos, en Colombia y en el exterior.",
+
     "contact.eyebrow": "Visítanos o escríbenos",
     "contact.title": "Solicita tu cotización",
     "contact.atelier": "El Atelier",
@@ -254,6 +286,9 @@ const I18N = {
   },
 
   fr: {
+    "meta.title": "Tailleur sur Mesure à Medellín, Colombie | Carlos Sanchez Bespoke — Costumes sur Mesure",
+    "meta.description": "Carlos Sanchez Bespoke — costumes sur mesure faits main à Medellín, en Colombie. Créez chaque détail de votre costume en ligne, saisissez vos mensurations en pouces ou en centimètres et demandez un devis. Service en français, anglais, espagnol et italien.",
+
     "brand.tagline": "Tailleur sur Mesure · Medellín",
 
     "nav.about": "L'Atelier",
@@ -362,6 +397,19 @@ const I18N = {
     "meas.outseam": "Longueur extérieure", "meas.outseam.hint": "De la taille au bas du pantalon",
     "meas.height": "Taille (stature)", "meas.height.hint": "Sans chaussures",
 
+    "faq.eyebrow": "Bon à savoir",
+    "faq.title": "Questions fréquentes",
+    "faq.q1": "Combien de temps faut-il pour un costume sur mesure ?",
+    "faq.a1": "Un costume grande mesure demande généralement six à huit semaines, avec deux à trois essayages. Des délais accélérés pour mariages et événements sont possibles sur demande.",
+    "faq.q2": "Combien coûte un costume sur mesure en Colombie ?",
+    "faq.a2": "Le prix dépend du tissu et de la construction choisis. Les costumes deux pièces de notre atelier de Medellín démarrent généralement autour de 1 200 US$, les beaux tissus italiens et anglais au-delà. Demandez un devis avec votre création pour un prix exact.",
+    "faq.q3": "Puis-je commander un costume à distance, hors de Colombie ?",
+    "faq.a3": "Oui. Vous pouvez créer votre costume en ligne, envoyer vos mensurations en pouces ou en centimètres (nous les convertissons automatiquement) et faire les essayages en visioconférence. Nous expédions dans le monde entier.",
+    "faq.q4": "Comment prendre mes mensurations chez moi ?",
+    "faq.a4": "Utilisez un mètre ruban souple sur des vêtements légers, gardez le ruban horizontal, ajusté sans serrer, et suivez les indications à côté de chaque champ du formulaire. Une seconde personne aide pour la poitrine, la carrure et les manches. Vous pouvez aussi réserver un essayage vidéo et nous vous guiderons en direct.",
+    "faq.q5": "Réalisez-vous des costumes de mariage et des smokings ?",
+    "faq.a5": "Oui — costumes de mariage, smokings, jaquettes et tenues de cérémonie sont une spécialité, pour les mariés et leur cortège, en Colombie comme à l'étranger.",
+
     "contact.eyebrow": "Venez nous voir ou écrivez-nous",
     "contact.title": "Demandez votre devis",
     "contact.atelier": "L'Atelier",
@@ -379,6 +427,9 @@ const I18N = {
   },
 
   it: {
+    "meta.title": "Sartoria su Misura a Medellín, Colombia | Carlos Sanchez Bespoke — Abiti su Misura",
+    "meta.description": "Carlos Sanchez Bespoke — abiti su misura fatti a mano a Medellín, in Colombia. Disegna ogni dettaglio del tuo abito online, inserisci le tue misure in pollici o centimetri e richiedi un preventivo. Servizio in italiano, inglese, spagnolo e francese.",
+
     "brand.tagline": "Sartoria su Misura · Medellín",
 
     "nav.about": "L'Atelier",
@@ -486,6 +537,19 @@ const I18N = {
     "meas.inseam": "Cavallo", "meas.inseam.hint": "Dal cavallo all'orlo dei pantaloni",
     "meas.outseam": "Lunghezza esterna", "meas.outseam.hint": "Dalla vita all'orlo dei pantaloni",
     "meas.height": "Altezza", "meas.height.hint": "Senza scarpe",
+
+    "faq.eyebrow": "Buono a sapersi",
+    "faq.title": "Domande frequenti",
+    "faq.q1": "Quanto tempo richiede un abito su misura?",
+    "faq.a1": "Un abito interamente su misura richiede in genere da sei a otto settimane, incluse due o tre prove. Tempi accelerati per matrimoni ed eventi sono possibili su richiesta.",
+    "faq.q2": "Quanto costa un abito su misura in Colombia?",
+    "faq.a2": "Il prezzo dipende dal tessuto e dalla costruzione scelti. Gli abiti due pezzi del nostro atelier di Medellín partono in genere da circa 1.200 US$, con i tessuti pregiati italiani e inglesi oltre questa cifra. Richiedi un preventivo con il tuo design per un prezzo esatto.",
+    "faq.q3": "Posso ordinare un abito su misura dall'estero?",
+    "faq.a3": "Sì. Puoi disegnare il tuo abito online, inviare le misure in pollici o centimetri (le convertiamo automaticamente) e fare le prove in videochiamata. Spediamo in tutto il mondo.",
+    "faq.q4": "Come prendo le misure a casa?",
+    "faq.a4": "Usa un metro da sarto su abiti leggeri, tieni il nastro orizzontale e aderente ma non stretto, e segui le indicazioni accanto a ogni campo del modulo misure. Una seconda persona aiuta per torace, spalle e maniche. Puoi anche prenotare una prova video e ti guideremo in diretta.",
+    "faq.q5": "Realizzate abiti da sposo e smoking?",
+    "faq.a5": "Sì — abiti da sposo, smoking, tight e abiti da cerimonia sono una specialità, per gli sposi e l'intero corteo, in Colombia e all'estero.",
 
     "contact.eyebrow": "Vieni a trovarci o scrivici",
     "contact.title": "Richiedi il tuo preventivo",

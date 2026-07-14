@@ -31,7 +31,11 @@
   );
 
   let unit = load("csb-unit") || "in";
-  let lang = load("csb-lang") || "en";
+
+  // language priority: ?lang= URL param (shareable/indexable) > saved choice > English
+  const LANGS = ["en", "es", "fr", "it"];
+  const urlLang = new URLSearchParams(window.location.search).get("lang");
+  let lang = LANGS.includes(urlLang) ? urlLang : (load("csb-lang") || "en");
   const measurements = load("csb-meas") || {}; // stored keyed by field, values in the CURRENT unit
 
   const MEAS_FIELDS = [
@@ -117,6 +121,24 @@
     $all(".lang-btn").forEach((b) =>
       b.classList.toggle("active", b.dataset.lang === lang)
     );
+
+    // SEO: localized title/description, self-referencing canonical, shareable URL
+    document.title = t("meta.title");
+    const md = $("#metaDescription");
+    if (md) md.setAttribute("content", t("meta.description"));
+    const canon = $("#canonicalLink");
+    if (canon) {
+      canon.setAttribute(
+        "href",
+        "https://carlossanchezbespoke.com/" + (lang === "en" ? "" : "?lang=" + lang)
+      );
+    }
+    try {
+      const url = new URL(window.location.href);
+      if (lang === "en") url.searchParams.delete("lang");
+      else url.searchParams.set("lang", lang);
+      history.replaceState(null, "", url);
+    } catch (e) { /* file:// or older browsers */ }
 
     renderSummary();
     renderMeasurements();
