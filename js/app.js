@@ -64,10 +64,13 @@
     brass: "#a98a3f"
   };
 
-  const LINING_COLORS = {
-    burgundy: "#6d1f31", royal: "#1f3f8f", gold: "#b98a2e",
-    emerald: "#1d5c45", plum: "#4b2a4e", black: "#191919"
-  };
+  /* catalog lookups (data lives in js/catalog.js) */
+  function fabricById(id) {
+    return CATALOG.fabrics.find((f) => f.id === id) || CATALOG.fabrics[0];
+  }
+  function liningById(id) {
+    return CATALOG.linings.find((l) => l.id === id) || CATALOG.linings[0];
+  }
 
   /* ---------------- helpers ---------------- */
 
@@ -143,11 +146,52 @@
       history.replaceState(null, "", url);
     } catch (e) { /* file:// or older browsers */ }
 
+    renderCatalogUI();
     renderSummary();
     renderMeasurements();
   }
 
   /* ---------------- customizer ---------------- */
+
+  // fabric cards + lining swatches, rendered from CATALOG (js/catalog.js)
+  function renderCatalogUI() {
+    const fabricGrid = $("#optFabric");
+    if (fabricGrid) {
+      fabricGrid.innerHTML = CATALOG.fabrics
+        .map(
+          (f) => `
+        <button class="fabric-card ${f.id === design.fabric ? "active" : ""}" data-value="${f.id}">
+          <span class="fc-name">${t(f.nameKey)}</span>
+          <span class="fc-spec">${t(f.compKey)} · ${f.weight} g/m²</span>
+          <span class="fc-meta">
+            <span class="fc-code">${escapeHtml(f.mill)} ${escapeHtml(f.code)}</span>
+            <span class="fc-season">${t(f.seasonKey)}</span>
+          </span>
+        </button>`
+        )
+        .join("");
+    }
+
+    const liningRow = $("#optLining");
+    if (liningRow) {
+      liningRow.innerHTML = CATALOG.linings
+        .map(
+          (l) => `
+        <button class="swatch ${l.id === design.lining ? "active" : ""}"
+                data-value="${l.id}" style="--sw:${l.hex}"
+                title="${t(l.nameKey)}" aria-label="${t(l.nameKey)}"></button>`
+        )
+        .join("");
+    }
+    renderLiningCaption();
+  }
+
+  function renderLiningCaption() {
+    const cap = $("#liningCaption");
+    if (!cap) return;
+    const l = liningById(design.lining);
+    cap.textContent = `${t(l.nameKey)} · ${t(l.matKey)} (${l.code})`;
+  }
 
   const OPTION_GROUPS = {
     optFabric: "fabric",
@@ -180,6 +224,7 @@
         save("csb-design", design);
         renderSuit();
         renderSummary();
+        if (prop === "lining") renderLiningCaption();
       });
     });
 
@@ -271,7 +316,7 @@
     const cloth = CLOTH[design.color] || CLOTH.navy;
     const patt = design.pattern !== "solid" ? design.pattern : null;
     const btnColor = BUTTON_COLORS[design.buttons] || BUTTON_COLORS.darkhorn;
-    const liningColor = LINING_COLORS[design.lining] || LINING_COLORS.burgundy;
+    const liningColor = liningById(design.lining).hex;
     const db = design.style === "db";
 
     let svg = "";
@@ -382,7 +427,10 @@
   /* ---------------- design summary ---------------- */
 
   const SUMMARY_ROWS = [
-    ["cust.fabric", () => t("cust.fabric." + design.fabric)],
+    ["cust.fabric", () => {
+      const f = fabricById(design.fabric);
+      return `${t(f.nameKey)} · ${f.weight} g/m² (${f.code})`;
+    }],
     ["cust.color", () => t("cust.color." + design.color)],
     ["cust.pattern", () => t("cust.pattern." + design.pattern)],
     ["cust.style", () => t("cust.style." + design.style)],
@@ -390,7 +438,10 @@
     ["cust.vents", () => t("cust.vents." + design.vents)],
     ["cust.pockets", () => t("cust.pockets." + design.pockets)],
     ["cust.buttons", () => t("cust.buttons." + design.buttons)],
-    ["cust.lining", () => t("cust.lining." + design.lining)],
+    ["cust.lining", () => {
+      const l = liningById(design.lining);
+      return `${t(l.nameKey)} · ${t(l.matKey)}`;
+    }],
     ["cust.trousers", () => t("cust.trousers." + design.trousers) + " · " + t("cust.hem." + design.hem)],
     ["cust.vest", () => t("cust.vest." + design.vest)],
     ["cust.monogram", () => design.monogram || t("cust.none")]
@@ -604,6 +655,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     bindNav();
+    renderCatalogUI();
     bindOptionGroups();
     bindUnitToggle();
     bindForm();

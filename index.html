@@ -373,12 +373,8 @@
         <div class="options-pane">
           <div class="opt-group">
             <h4 data-i18n="cust.fabric">Fabric</h4>
-            <div class="chip-row" id="optFabric">
-              <button class="chip active" data-value="wool" data-i18n="cust.fabric.wool">Super 130s Wool</button>
-              <button class="chip" data-value="linen" data-i18n="cust.fabric.linen">Colombian Linen</button>
-              <button class="chip" data-value="cotton" data-i18n="cust.fabric.cotton">Cotton Twill</button>
-              <button class="chip" data-value="cashmere" data-i18n="cust.fabric.cashmere">Wool &amp; Cashmere</button>
-            </div>
+            <!-- fabric cards rendered from js/catalog.js -->
+            <div class="fabric-grid" id="optFabric"></div>
           </div>
 
           <div class="opt-group">
@@ -453,14 +449,9 @@
 
           <div class="opt-group">
             <h4 data-i18n="cust.lining">Lining</h4>
-            <div class="swatch-row" id="optLining">
-              <button class="swatch active" data-value="burgundy" style="--sw:#6d1f31" title="Burgundy"></button>
-              <button class="swatch" data-value="royal"   style="--sw:#1f3f8f" title="Royal Blue"></button>
-              <button class="swatch" data-value="gold"    style="--sw:#b98a2e" title="Gold"></button>
-              <button class="swatch" data-value="emerald" style="--sw:#1d5c45" title="Emerald"></button>
-              <button class="swatch" data-value="plum"    style="--sw:#4b2a4e" title="Plum"></button>
-              <button class="swatch" data-value="black"   style="--sw:#191919" title="Black"></button>
-            </div>
+            <!-- lining swatches rendered from js/catalog.js -->
+            <div class="swatch-row" id="optLining"></div>
+            <p class="lining-caption" id="liningCaption"></p>
           </div>
 
           <div class="opt-group">
@@ -629,6 +620,7 @@
   </footer>
 
   <script src="js/i18n.js"></script>
+  <script src="js/catalog.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
