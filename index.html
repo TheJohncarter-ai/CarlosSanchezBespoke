@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Carlos Sanchez Bespoke — handcrafted Colombian tailoring from Medellín. Design your own bespoke suit and submit your measurements online." />
+  <title>Carlos Sanchez Bespoke — Colombian Tailoring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="preload">
+
+  <!-- ============ PRELOADER ============ -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pre-curtain pre-top"></div>
+    <div class="pre-curtain pre-bottom"></div>
+    <div class="pre-center">
+      <svg class="pre-svg" viewBox="0 0 260 170" role="img" aria-label="Loading">
+        <!-- monogram ring, draws itself -->
+        <circle class="pre-ring" cx="130" cy="62" r="46" fill="none"
+                stroke="#d4b76a" stroke-width="1.5"
+                stroke-dasharray="290" stroke-dashoffset="290"
+                transform="rotate(-90 130 62)"/>
+        <text class="pre-mono" x="130" y="76" text-anchor="middle"
+              font-family="Georgia, serif" font-size="38" letter-spacing="4"
+              fill="#d4b76a">CS</text>
+        <!-- stitch guide line -->
+        <path id="stitchPath" d="M18 140 H242" fill="none"
+              stroke="rgba(212,183,106,0.25)" stroke-width="1"/>
+        <!-- sewn thread, draws along the guide -->
+        <path class="pre-thread" d="M18 140 H242" fill="none"
+              stroke="#d4b76a" stroke-width="1.6"
+              stroke-dasharray="7 5" stroke-dashoffset="224"/>
+        <!-- needle travelling along the stitch -->
+        <g class="pre-needle">
+          <path d="M0 0 L26 -7 L27 -5 L3 3 Z" fill="#e8e4da" stroke="rgba(0,0,0,0.25)" stroke-width="0.5"/>
+          <circle cx="24.5" cy="-5.8" r="1.3" fill="none" stroke="#8f8f96" stroke-width="0.8"/>
+          <animateMotion dur="2.2s" repeatCount="indefinite" rotate="0">
+            <mpath href="#stitchPath"/>
+          </animateMotion>
+        </g>
+      </svg>
+      <p class="pre-name">CARLOS&nbsp;SANCHEZ</p>
+      <p class="pre-sub">BESPOKE&nbsp;·&nbsp;MEDELLÍN</p>
+    </div>
+  </div>
+  <noscript>
+    <style>
+      #preloader { display: none !important; }
+      body.preload .reveal, body.preload .hero-inner { opacity: 1 !important; transform: none !important; }
+    </style>
+  </noscript>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark">CS</span>
+        <span class="brand-text">
+          <span class="brand-name">Carlos Sanchez</span>
+          <span class="brand-sub" data-i18n="brand.tagline">Bespoke Tailoring · Medellín</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#about" data-i18n="nav.about">The Atelier</a>
+        <a href="#customize" data-i18n="nav.customize">Design Your Suit</a>
+        <a href="#measurements" data-i18n="nav.measurements">Measurements</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="es">ES</button>
+          <button class="lang-btn" data-lang="fr">FR</button>
+          <button class="lang-btn" data-lang="it">IT</button>
+        </div>
+        <button class="nav-burger" id="navBurger" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow" data-i18n="hero.eyebrow">Bespoke Colombian Tailoring</p>
+      <h1 class="hero-title">Carlos Sanchez</h1>
+      <p class="hero-sub" data-i18n="hero.subtitle">
+        Handcrafted suits from the heart of Medellín. Every stitch cut to your
+        silhouette, every detail chosen by you.
+      </p>
+      <div class="hero-cta">
+        <a href="#customize" class="btn btn-gold" data-i18n="hero.cta1">Design Your Suit</a>
+        <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Book a Fitting</a>
+      </div>
+    </div>
+    <div class="hero-rule"><span>✂</span></div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="container">
+      <p class="eyebrow" data-i18n="about.eyebrow">The Atelier</p>
+      <h2 class="section-title" data-i18n="about.title">Three generations of Colombian craft</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p data-i18n="about.p1">
+            From his atelier in El Poblado, Medellín, Carlos Sanchez continues a family
+            tradition of bespoke tailoring that began in 1962. Each garment is drafted
+            from a personal pattern, cut by hand, and finished with the patience that
+            only true bespoke allows.
+          </p>
+          <p data-i18n="about.p2">
+            We work with the world's finest mills — and with Colombia's own linen and
+            cotton weavers — to build suits that breathe in the tropics and command any
+            room, from Bogotá to Milan.
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">60+</span>
+            <span class="stat-label" data-i18n="about.stat1">Years of family tradition</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">3,000+</span>
+            <span class="stat-label" data-i18n="about.stat2">Suits delivered</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">50 h</span>
+            <span class="stat-label" data-i18n="about.stat3">Of handwork in every suit</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="services">
+        <div class="service-card">
+          <span class="service-icon">🧵</span>
+          <h3 data-i18n="services.s1.title">Full Bespoke Suits</h3>
+          <p data-i18n="services.s1.text">A unique paper pattern, two to three fittings, and a suit that exists nowhere else in the world.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">💍</span>
+          <h3 data-i18n="services.s2.title">Weddings &amp; Ceremony</h3>
+          <p data-i18n="services.s2.text">Morning coats, tuxedos and guayabera-inspired formalwear for the most important days.</p>
+        </div>
+        <div class="service-card">
+          <span class="service-icon">🧳</span>
+          <h3 data-i18n="services.s3.title">Wardrobe Consulting</h3>
+          <p data-i18n="services.s3.text">Travel capsules and seasonal wardrobes built around your life, climate and calendar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CUSTOMIZER ============ -->
+  <section class="section section-dark" id="customize">
+    <div class="container">
+      <p class="eyebrow" data-i18n="cust.eyebrow">The Design Room</p>
+      <h2 class="section-title" data-i18n="cust.title">Design your suit</h2>
+      <p class="section-sub" data-i18n="cust.subtitle">
+        Choose every detail below. Your design updates live and is included with your
+        quote request.
+      </p>
+
+      <div class="customizer">
+        <!-- Live preview -->
+        <div class="preview-pane">
+          <div class="preview-frame">
+            <svg id="suitPreview" viewBox="0 0 300 420" aria-label="Suit preview" role="img">
+              <defs>
+                <pattern id="pinstripe" patternUnits="userSpaceOnUse" width="7" height="7">
+                  <rect width="7" height="7" fill="transparent"/>
+                  <line x1="1" y1="0" x2="1" y2="7" stroke="rgba(255,255,255,0.35)" stroke-width="0.8"/>
+                </pattern>
+                <pattern id="windowpane" patternUnits="userSpaceOnUse" width="26" height="26">
+                  <rect width="26" height="26" fill="transparent"/>
+                  <path d="M0 1 H26 M1 0 V26" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+                </pattern>
+                <pattern id="herringbone" patternUnits="userSpaceOnUse" width="10" height="10">
+                  <rect width="10" height="10" fill="transparent"/>
+                  <path d="M0 10 L5 5 L10 10 M0 5 L5 0 L10 5" stroke="rgba(255,255,255,0.14)" stroke-width="1" fill="none"/>
+                </pattern>
+              </defs>
+              <g id="svgRoot"></g>
+            </svg>
+          </div>
+          <p class="preview-caption" data-i18n="cust.previewCaption">Live preview — illustrative of cloth, cut and details.</p>
+        </div>
+
+        <!-- Options -->
+        <div class="options-pane">
+          <div class="opt-group">
+            <h4 data-i18n="cust.fabric">Fabric</h4>
+            <div class="chip-row" id="optFabric">
+              <button class="chip active" data-value="wool" data-i18n="cust.fabric.wool">Super 130s Wool</button>
+              <button class="chip" data-value="linen" data-i18n="cust.fabric.linen">Colombian Linen</button>
+              <button class="chip" data-value="cotton" data-i18n="cust.fabric.cotton">Cotton Twill</button>
+              <button class="chip" data-value="cashmere" data-i18n="cust.fabric.cashmere">Wool &amp; Cashmere</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.color">Cloth colour</h4>
+            <div class="swatch-row" id="optColor">
+              <button class="swatch active" data-value="navy"     style="--sw:#22304d" title="Navy"></button>
+              <button class="swatch" data-value="charcoal" style="--sw:#3d3f43" title="Charcoal"></button>
+              <button class="swatch" data-value="black"    style="--sw:#1a1a1e" title="Black"></button>
+              <button class="swatch" data-value="grey"     style="--sw:#7a7d83" title="Light Grey"></button>
+              <button class="swatch" data-value="brown"    style="--sw:#5a4531" title="Chocolate"></button>
+              <button class="swatch" data-value="burgundy" style="--sw:#5e2533" title="Burgundy"></button>
+              <button class="swatch" data-value="olive"    style="--sw:#4d5138" title="Olive"></button>
+              <button class="swatch" data-value="cream"    style="--sw:#d9cdb4" title="Cream"></button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.pattern">Pattern</h4>
+            <div class="chip-row" id="optPattern">
+              <button class="chip active" data-value="solid" data-i18n="cust.pattern.solid">Solid</button>
+              <button class="chip" data-value="pinstripe" data-i18n="cust.pattern.pinstripe">Pinstripe</button>
+              <button class="chip" data-value="windowpane" data-i18n="cust.pattern.windowpane">Windowpane</button>
+              <button class="chip" data-value="herringbone" data-i18n="cust.pattern.herringbone">Herringbone</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.style">Jacket style</h4>
+            <div class="chip-row" id="optStyle">
+              <button class="chip active" data-value="sb2" data-i18n="cust.style.sb2">Single-breasted · 2 buttons</button>
+              <button class="chip" data-value="sb3" data-i18n="cust.style.sb3">Single-breasted · 3 buttons</button>
+              <button class="chip" data-value="db" data-i18n="cust.style.db">Double-breasted · 6×2</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.lapel">Lapel</h4>
+            <div class="chip-row" id="optLapel">
+              <button class="chip active" data-value="notch" data-i18n="cust.lapel.notch">Notch</button>
+              <button class="chip" data-value="peak" data-i18n="cust.lapel.peak">Peak</button>
+              <button class="chip" data-value="shawl" data-i18n="cust.lapel.shawl">Shawl</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.vents">Vents</h4>
+            <div class="chip-row" id="optVents">
+              <button class="chip" data-value="none" data-i18n="cust.vents.none">No vent</button>
+              <button class="chip" data-value="single" data-i18n="cust.vents.single">Single vent</button>
+              <button class="chip active" data-value="double" data-i18n="cust.vents.double">Double vents</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.pockets">Pockets</h4>
+            <div class="chip-row" id="optPockets">
+              <button class="chip active" data-value="flap" data-i18n="cust.pockets.flap">Flap</button>
+              <button class="chip" data-value="jetted" data-i18n="cust.pockets.jetted">Jetted</button>
+              <button class="chip" data-value="patch" data-i18n="cust.pockets.patch">Patch</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.buttons">Buttons</h4>
+            <div class="chip-row" id="optButtons">
+              <button class="chip active" data-value="darkhorn" data-i18n="cust.buttons.darkhorn">Dark horn</button>
+              <button class="chip" data-value="naturalhorn" data-i18n="cust.buttons.naturalhorn">Natural horn</button>
+              <button class="chip" data-value="pearl" data-i18n="cust.buttons.pearl">Mother of pearl</button>
+              <button class="chip" data-value="brass" data-i18n="cust.buttons.brass">Brass</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.lining">Lining</h4>
+            <div class="swatch-row" id="optLining">
+              <button class="swatch active" data-value="burgundy" style="--sw:#6d1f31" title="Burgundy"></button>
+              <button class="swatch" data-value="royal"   style="--sw:#1f3f8f" title="Royal Blue"></button>
+              <button class="swatch" data-value="gold"    style="--sw:#b98a2e" title="Gold"></button>
+              <button class="swatch" data-value="emerald" style="--sw:#1d5c45" title="Emerald"></button>
+              <button class="swatch" data-value="plum"    style="--sw:#4b2a4e" title="Plum"></button>
+              <button class="swatch" data-value="black"   style="--sw:#191919" title="Black"></button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.trousers">Trousers</h4>
+            <div class="chip-row" id="optTrousers">
+              <button class="chip active" data-value="flat" data-i18n="cust.trousers.flat">Flat front</button>
+              <button class="chip" data-value="pleated" data-i18n="cust.trousers.pleated">Single pleat</button>
+            </div>
+            <div class="chip-row" id="optHem">
+              <button class="chip active" data-value="plain" data-i18n="cust.hem.plain">Plain hem</button>
+              <button class="chip" data-value="cuffed" data-i18n="cust.hem.cuffed">Cuffed hem</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.vest">Waistcoat</h4>
+            <div class="chip-row" id="optVest">
+              <button class="chip active" data-value="none" data-i18n="cust.vest.none">Two-piece</button>
+              <button class="chip" data-value="vest" data-i18n="cust.vest.vest">Three-piece (matching waistcoat)</button>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <h4 data-i18n="cust.monogram">Monogram</h4>
+            <input type="text" id="monogram" class="text-input" maxlength="4"
+                   data-i18n-placeholder="cust.monogram.placeholder" placeholder="e.g. C.S." />
+            <p class="opt-note" data-i18n="cust.monogram.note">Embroidered inside the jacket, up to 4 characters.</p>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <aside class="summary-pane">
+          <h3 data-i18n="cust.summary">Your design</h3>
+          <ul id="summaryList" class="summary-list"></ul>
+          <a href="#measurements" class="btn btn-gold btn-block" data-i18n="cust.next">Next: your measurements ↓</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEASUREMENTS ============ -->
+  <section class="section" id="measurements">
+    <div class="container">
+      <p class="eyebrow" data-i18n="meas.eyebrow">Made to your body</p>
+      <h2 class="section-title" data-i18n="meas.title">Your measurements</h2>
+      <p class="section-sub" data-i18n="meas.subtitle">
+        Enter your measurements in inches or centimetres. Colombia uses the metric
+        system, so everything is automatically converted to centimetres for the
+        atelier in Medellín.
+      </p>
+
+      <div class="unit-toggle-wrap">
+        <span data-i18n="meas.enterIn">I am entering measurements in:</span>
+        <div class="unit-toggle" role="group" aria-label="Units">
+          <button class="unit-btn active" data-unit="in" data-i18n="meas.unit.in">Inches (in)</button>
+          <button class="unit-btn" data-unit="cm" data-i18n="meas.unit.cm">Centimetres (cm)</button>
+        </div>
+      </div>
+
+      <div class="meas-grid" id="measGrid">
+        <!-- rows injected by app.js -->
+      </div>
+
+      <div class="meas-footer">
+        <p class="meas-note" data-i18n="meas.note">
+          🇨🇴 Values in the right-hand column are the centimetre measurements our
+          tailors in Medellín will work from. Not sure how to measure? Book a video
+          fitting and we'll guide you.
+        </p>
+        <button class="btn btn-gold" id="copyMeasBtn" data-i18n="meas.copy">Include measurements in my quote request</button>
+        <span id="measSaved" class="saved-flag" data-i18n="meas.saved" hidden>Saved ✓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section-dark" id="contact">
+    <div class="container">
+      <p class="eyebrow" data-i18n="contact.eyebrow">Visit or write</p>
+      <h2 class="section-title" data-i18n="contact.title">Request your quote</h2>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 data-i18n="contact.atelier">The Atelier</h3>
+          <p>
+            Carrera 37 #10A-32, El Poblado<br />
+            Medellín, Antioquia, Colombia
+          </p>
+          <p>
+            <span data-i18n="contact.hours">Mon–Sat, 9:00–18:00 (COT)</span><br />
+            +57 (604) 555 0173<br />
+            atelier@carlossanchezbespoke.com
+          </p>
+          <p class="contact-langs" data-i18n="contact.langs">We serve clients in English, Spanish, French and Italian.</p>
+        </div>
+
+        <form class="contact-form" id="quoteForm" novalidate>
+          <label>
+            <span data-i18n="contact.name">Full name</span>
+            <input type="text" name="name" required class="text-input" />
+          </label>
+          <label>
+            <span data-i18n="contact.email">Email</span>
+            <input type="email" name="email" required class="text-input" />
+          </label>
+          <label>
+            <span data-i18n="contact.message">Message</span>
+            <textarea name="message" rows="5" class="text-input"
+                      data-i18n-placeholder="contact.msgPlaceholder"
+                      placeholder="Tell us about the occasion, timeline, or any questions…"></textarea>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="attachDesign" checked />
+            <span data-i18n="contact.attach">Attach my suit design and measurements</span>
+          </label>
+          <button type="submit" class="btn btn-gold btn-block" data-i18n="contact.send">Send quote request</button>
+          <p id="formStatus" class="form-status" hidden></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 Carlos Sanchez Bespoke · Medellín, Colombia</span>
+      <span data-i18n="footer.made">Hand-cut. Hand-sewn. Hecho en Colombia.</span>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
