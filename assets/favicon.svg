@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="fs" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef1f6"/>
+      <stop offset="1" stop-color="#8b98af"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="10" fill="#0a1424"/>
+  <path d="M32 6 L54 12 V38 C54 52 45 60 32 60 C19 60 10 52 10 38 V12 Z"
+        fill="#101f3c" stroke="url(#fs)" stroke-width="2.4"/>
+  <path d="M32 11 L49 16 V37 C49 48 42 54 32 55 C22 54 15 48 15 37 V16 Z"
+        fill="none" stroke="#2f5fd0" stroke-width="1.2" opacity="0.9"/>
+  <text x="32" y="42" text-anchor="middle" font-family="Georgia, serif"
+        font-weight="600" font-size="22" letter-spacing="1"
+        fill="url(#fs)">CS</text>
+</svg>
