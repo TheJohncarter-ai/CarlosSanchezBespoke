@@ -241,11 +241,14 @@
   }
 
   /* ---------------- SVG suit preview ---------------- */
+  /* Front view on a hanger at tailoring proportions.
+     Draw order: shadow, hanger, trousers, torso, V-opening (shirt/tie/vest),
+     closure, sleeves, lapels+collar, pockets, buttons, monogram. */
 
   function piece(d, fill, opts) {
     opts = opts || {};
-    const stroke = opts.stroke || "rgba(0,0,0,0.45)";
-    const sw = opts.strokeWidth != null ? opts.strokeWidth : 1.2;
+    const stroke = opts.stroke || "rgba(5,9,18,0.5)";
+    const sw = opts.strokeWidth != null ? opts.strokeWidth : 1;
     let out = `<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
     if (opts.pattern) {
       out += `<path d="${d}" fill="url(#${opts.pattern})" stroke="none"/>`;
@@ -253,60 +256,99 @@
     return out;
   }
 
-  function lapelPaths(style, lapelType) {
-    // Returns [leftLapelPath, rightLapelPath] as SVG path strings.
-    // Coordinate frame: neck at (150, 78), button stance depth depends on style.
-    const stanceY = style === "sb3" ? 150 : style === "db" ? 165 : 168;
-    const cross = style === "db" ? 14 : 0; // double-breasted overlap
-
-    if (lapelType === "shawl") {
-      return [
-        `M150 78 C136 84 124 96 121 112 C118 132 128 152 ${150 - cross} ${stanceY} L150 ${stanceY + 8} C142 140 136 108 150 78 Z`,
-        `M150 78 C164 84 176 96 179 112 C182 132 172 152 ${150 + cross} ${stanceY} L150 ${stanceY + 8} C158 140 164 108 150 78 Z`
-      ];
-    }
-    if (lapelType === "peak") {
-      return [
-        `M150 78 L126 92 L133 104 L112 100 L118 118 C116 138 128 154 ${150 - cross} ${stanceY} L150 ${stanceY + 8} C141 140 137 106 150 78 Z`,
-        `M150 78 L174 92 L167 104 L188 100 L182 118 C184 138 172 154 ${150 + cross} ${stanceY} L150 ${stanceY + 8} C159 140 163 106 150 78 Z`
-      ];
-    }
-    // notch (default)
-    return [
-      `M150 78 L128 94 L134 103 L124 112 C120 134 130 152 ${150 - cross} ${stanceY} L150 ${stanceY + 8} C141 140 138 106 150 78 Z`,
-      `M150 78 L172 94 L166 103 L176 112 C180 134 170 152 ${150 + cross} ${stanceY} L150 ${stanceY + 8} C159 140 162 106 150 78 Z`
-    ];
+  function suitDefs(cloth) {
+    return `<defs>
+      <linearGradient id="gCloth" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${cloth.light}"/>
+        <stop offset="0.45" stop-color="${cloth.base}"/>
+        <stop offset="1" stop-color="${cloth.dark}"/>
+      </linearGradient>
+      <linearGradient id="gLapel" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${cloth.light}"/>
+        <stop offset="1" stop-color="${cloth.base}"/>
+      </linearGradient>
+      <linearGradient id="gTrouser" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${cloth.base}"/>
+        <stop offset="1" stop-color="${cloth.dark}"/>
+      </linearGradient>
+      <radialGradient id="gShadow" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="rgba(6,10,20,0.45)"/>
+        <stop offset="1" stop-color="rgba(6,10,20,0)"/>
+      </radialGradient>
+      <linearGradient id="gShirt" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f4f5f7"/>
+        <stop offset="1" stop-color="#d3d8df"/>
+      </linearGradient>
+    </defs>`;
   }
 
-  function buttonsMarkup(style, btnColor) {
-    const r = 3.2;
-    const stroke = "rgba(0,0,0,0.5)";
-    if (style === "db") {
-      const ys = [172, 192, 212];
-      return ys
-        .map(
-          (y) =>
-            `<circle cx="136" cy="${y}" r="${r}" fill="${btnColor}" stroke="${stroke}"/>` +
-            `<circle cx="164" cy="${y}" r="${r}" fill="${btnColor}" stroke="${stroke}"/>`
-        )
-        .join("");
+  function stanceInfo(style) {
+    if (style === "sb3") return { breakY: 172, rows: [172, 192, 212] };
+    if (style === "db") return { breakY: 186, rows: [186, 206, 226] };
+    return { breakY: 190, rows: [190, 212] };
+  }
+
+  function refinedButton(x, y, color, r) {
+    r = r || 3.4;
+    return `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="rgba(5,9,18,0.55)" stroke-width="0.8"/>
+            <circle cx="${x - r * 0.32}" cy="${y - r * 0.32}" r="${r * 0.3}" fill="rgba(255,255,255,0.35)"/>`;
+  }
+
+  function mirrorX(x) { return 300 - x; }
+
+  function lapelMarkup(style, lapelType, cloth, patt) {
+    const { breakY } = stanceInfo(style);
+    const db = style === "db";
+    const closL = db ? 164 : 150; // where the left (viewer) lapel sweeps to
+    const closR = db ? 136 : 150;
+
+    let leftLapel, rightLapel, leftCollar = "", rightCollar = "";
+
+    if (lapelType === "shawl") {
+      leftLapel = `M141 73 C 131 85 126 105 128 128 C 130 154 138 172 ${closL} ${breakY} L 140 75 Z`;
+      rightLapel = `M159 73 C 169 85 174 105 172 128 C 170 154 162 172 ${closR} ${breakY} L 160 75 Z`;
+    } else if (lapelType === "peak") {
+      leftLapel = `M140 74 L 133 97 L 120 89 C 123 112 130 152 ${closL} ${breakY} Z`;
+      rightLapel = `M160 74 L 167 97 L 180 89 C 177 112 170 152 ${closR} ${breakY} Z`;
+      leftCollar = `M144 70 C 137 77 134 86 133 94 L 136 97 C 138 87 141 78 147 73 Z`;
+      rightCollar = `M156 70 C 163 77 166 86 167 94 L 164 97 C 162 87 159 78 153 73 Z`;
+    } else { // notch
+      leftLapel = `M140 74 C 134 84 130 95 128 105 C 126 132 133 164 ${closL} ${breakY} Z`;
+      rightLapel = `M160 74 C 166 84 170 95 172 105 C 174 132 167 164 ${closR} ${breakY} Z`;
+      leftCollar = `M144 70 C 138 76 134 84 131 93 L 136 98 C 138 88 142 79 147 74 Z`;
+      rightCollar = `M156 70 C 162 76 166 84 169 93 L 164 98 C 162 88 158 79 153 74 Z`;
     }
-    const ys = style === "sb3" ? [156, 176, 196] : [172, 192];
-    return ys
-      .map((y) => `<circle cx="150" cy="${y}" r="${r}" fill="${btnColor}" stroke="${stroke}"/>`)
-      .join("");
+
+    let out = "";
+    out += piece(leftLapel, "url(#gLapel)", { pattern: patt, strokeWidth: 0.9 });
+    out += piece(rightLapel, "url(#gLapel)", { pattern: patt, strokeWidth: 0.9 });
+    if (leftCollar) {
+      out += piece(leftCollar, cloth.dark, { strokeWidth: 0.7 });
+      out += piece(rightCollar, cloth.dark, { strokeWidth: 0.7 });
+    }
+    // under-collar at the back of the neck
+    out += piece(`M144 69 Q150 74 156 69 L 154 75 Q 150 78 146 75 Z`, cloth.dark, { strokeWidth: 0.7 });
+    // pick stitching along the lapel edges
+    out += `<path d="M129 107 C 127 133 134 163 ${closL - 2} ${breakY - 5}"
+              stroke="rgba(255,255,255,0.15)" stroke-width="0.7" fill="none" stroke-dasharray="1.6 2.8"/>
+            <path d="M171 107 C 173 133 166 163 ${closR + 2} ${breakY - 5}"
+              stroke="rgba(255,255,255,0.15)" stroke-width="0.7" fill="none" stroke-dasharray="1.6 2.8"/>`;
+    return out;
   }
 
   function pocketsMarkup(type, cloth, patt) {
-    const y = 208;
+    const y = 232;
     const flap = (x) =>
-      piece(`M${x} ${y} h34 v7 q-17 6 -34 0 Z`, cloth.light, { pattern: patt, strokeWidth: 1 });
+      piece(`M${x} ${y} h32 a2 2 0 0 1 2 2 v4 q-18 5 -36 0 v-4 a2 2 0 0 1 2 -2 Z`,
+        "url(#gLapel)", { pattern: patt, strokeWidth: 0.8 }) +
+      `<path d="M${x - 1} ${y} h36" stroke="rgba(5,9,18,0.35)" stroke-width="0.8"/>`;
     const jet = (x) =>
-      `<rect x="${x}" y="${y}" width="34" height="3" rx="1.5" fill="${cloth.dark}"/>`;
+      `<rect x="${x}" y="${y}" width="34" height="2.6" rx="1.3" fill="${cloth.dark}" stroke="rgba(5,9,18,0.4)" stroke-width="0.5"/>`;
     const patch = (x) =>
-      piece(`M${x} ${y - 4} h32 v26 q-16 7 -32 0 Z`, cloth.light, { pattern: patt, strokeWidth: 1 });
+      piece(`M${x} ${y - 3} h30 v22 q-15 6 -30 0 Z`, "url(#gLapel)", { pattern: patt, strokeWidth: 0.8 }) +
+      `<path d="M${x} ${y + 1} h30" stroke="rgba(5,9,18,0.25)" stroke-width="0.6"/>`;
     const fn = type === "jetted" ? jet : type === "patch" ? patch : flap;
-    return fn(84) + fn(182);
+    return fn(112) + fn(156);
   }
 
   function renderSuit() {
@@ -318,99 +360,139 @@
     const btnColor = BUTTON_COLORS[design.buttons] || BUTTON_COLORS.darkhorn;
     const liningColor = liningById(design.lining).hex;
     const db = design.style === "db";
+    const { breakY, rows } = stanceInfo(design.style);
+    // the V of shirt/tie ends where the fronts meet
+    const vApexY = db ? 158 : breakY - 2;
 
-    let svg = "";
+    let svg = suitDefs(cloth);
 
-    /* hanger bar */
-    svg += `<path d="M150 18 q-4 -10 4 -12" fill="none" stroke="#8f8f96" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M60 52 Q150 14 240 52" fill="none" stroke="#8f8f96" stroke-width="3" stroke-linecap="round"/>`;
+    /* floor shadow */
+    svg += `<ellipse cx="150" cy="486" rx="62" ry="9" fill="url(#gShadow)"/>`;
+
+    /* hanger */
+    svg += `<path d="M150 46 v-12 q0 -8 8 -8" fill="none" stroke="#8f99ac" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M72 64 Q150 30 228 64" fill="none" stroke="#8f99ac" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M72 64 Q150 34 228 64" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1" stroke-linecap="round"/>`;
 
     /* trousers */
-    const hemY = 396;
-    const cuffH = 10;
     svg += piece(
-      `M116 252 L184 252 L192 ${hemY} L158 ${hemY} L150 296 L142 ${hemY} L108 ${hemY} Z`,
-      cloth.base,
-      { pattern: patt }
+      `M112 266 L147 266 C 148 280 149 290 150 300
+       L 146 468 L 117 468 C 113 400 110 330 112 266 Z`,
+      "url(#gTrouser)", { pattern: patt }
     );
+    svg += piece(
+      `M188 266 L153 266 C 152 280 151 290 150 300
+       L 154 468 L 183 468 C 187 400 190 330 188 266 Z`,
+      "url(#gTrouser)", { pattern: patt }
+    );
+    // gap between the legs
+    svg += `<path d="M150 302 L146.5 468 L153.5 468 Z" fill="rgba(5,9,18,0.4)" stroke="none"/>`;
     // creases
-    svg += `<path d="M129 262 L126 ${hemY - 4} M171 262 L174 ${hemY - 4}" stroke="rgba(0,0,0,0.28)" stroke-width="1" fill="none"/>`;
+    svg += `<path d="M130 290 L129 464" stroke="rgba(255,255,255,0.12)" stroke-width="1.6" fill="none"/>
+            <path d="M132 290 L131 464" stroke="rgba(5,9,18,0.3)" stroke-width="0.8" fill="none"/>
+            <path d="M170 290 L171 464" stroke="rgba(255,255,255,0.12)" stroke-width="1.6" fill="none"/>
+            <path d="M168 290 L169 464" stroke="rgba(5,9,18,0.3)" stroke-width="0.8" fill="none"/>`;
     if (design.trousers === "pleated") {
-      svg += `<path d="M132 254 L134 274 M168 254 L166 274" stroke="rgba(0,0,0,0.4)" stroke-width="1.4" fill="none"/>`;
+      svg += `<path d="M138 268 L139 284 M162 268 L161 284" stroke="rgba(5,9,18,0.4)" stroke-width="1.1" fill="none"/>`;
     }
     if (design.hem === "cuffed") {
-      svg += `<rect x="108" y="${hemY - cuffH}" width="34.5" height="${cuffH}" fill="${cloth.dark}"/>
-              <rect x="157.5" y="${hemY - cuffH}" width="34.5" height="${cuffH}" fill="${cloth.dark}"/>`;
+      svg += `<path d="M117.5 457 L146 457 L146 468 L117 468 Z" fill="${cloth.dark}" stroke="rgba(5,9,18,0.4)" stroke-width="0.7"/>
+              <path d="M154 457 L182.5 457 L183 468 L154 468 Z" fill="${cloth.dark}" stroke="rgba(5,9,18,0.4)" stroke-width="0.7"/>`;
     }
 
-    /* shirt + tie */
-    svg += `<path d="M136 76 L150 130 L164 76 L158 70 L142 70 Z" fill="#f4f2ec" stroke="rgba(0,0,0,0.2)"/>`;
-    svg += `<path d="M146 74 L154 74 L157 84 L150 128 L143 84 Z" fill="${liningColor}" stroke="rgba(0,0,0,0.3)" stroke-width="0.8"/>`;
+    /* jacket torso */
+    svg += piece(
+      `M88 78
+       C 96 71 124 65 139 67
+       Q 150 73 161 67
+       C 176 65 204 71 212 78
+       C 210 92 205 104 202 116
+       C 198 150 196 172 194 196
+       C 195 228 192 252 190 272
+       L 110 272
+       C 108 252 105 228 106 196
+       C 104 172 102 150 98 116
+       C 95 104 90 92 88 78 Z`,
+      "url(#gCloth)", { pattern: patt }
+    );
+    // side shading
+    svg += `<path d="M98 116 C 104 172 106 228 110 272 L 120 272 C 115 220 113 160 112 118 Z"
+              fill="rgba(5,9,18,0.16)" stroke="none"/>
+            <path d="M202 116 C 196 172 194 228 190 272 L 180 272 C 185 220 187 160 188 118 Z"
+              fill="rgba(5,9,18,0.16)" stroke="none"/>`;
 
-    /* waistcoat */
+    /* V opening: shirt, collar points, tie — then waistcoat over the shirt */
+    svg += `<path d="M141 72 L159 72 L150 ${vApexY} Z" fill="url(#gShirt)" stroke="rgba(5,9,18,0.25)" stroke-width="0.6"/>`;
+    svg += `<path d="M141 71 L150 87 L146 72 Z" fill="#e4e7ec" stroke="rgba(5,9,18,0.2)" stroke-width="0.5"/>
+            <path d="M159 71 L150 87 L154 72 Z" fill="#e4e7ec" stroke="rgba(5,9,18,0.2)" stroke-width="0.5"/>`;
+    const tieTip = design.vest === "vest" ? 132 : vApexY - 16;
+    svg += `<path d="M145.5 77 L154.5 77 L157 89 L143 89 Z" fill="${liningColor}" stroke="rgba(5,9,18,0.35)" stroke-width="0.7"/>
+            <path d="M146.5 89 L153.5 89 L152.5 ${tieTip} L150 ${tieTip + 9} L147.5 ${tieTip} Z" fill="${liningColor}" stroke="rgba(5,9,18,0.35)" stroke-width="0.7"/>
+            <path d="M147 78 L150 88" stroke="rgba(255,255,255,0.28)" stroke-width="1" fill="none"/>`;
+
     if (design.vest === "vest") {
       svg += piece(
-        `M132 92 L150 132 L168 92 L178 108 L172 236 L150 246 L128 236 L122 108 Z`,
-        cloth.dark,
-        { pattern: patt }
+        `M141 94 L150 146 L159 94 L165 102
+         C 164 128 158 148 152 ${vApexY - 2}
+         L 148 ${vApexY - 2}
+         C 142 148 136 128 135 102 Z`,
+        cloth.dark, { pattern: patt, strokeWidth: 0.8 }
       );
-      svg += [160, 180, 200, 218]
-        .map((y) => `<circle cx="150" cy="${y}" r="2.4" fill="${btnColor}" stroke="rgba(0,0,0,0.5)"/>`)
-        .join("");
+      svg += [152, 163, 174].map((y) => refinedButton(150, y, btnColor, 2)).join("");
     }
 
-    /* jacket body */
-    const stanceY = design.style === "sb3" ? 150 : db ? 165 : 168;
-    // left front panel
-    svg += piece(
-      `M150 78 C138 92 132 120 ${db ? 164 : 150} ${stanceY}
-       L${db ? 166 : 152} 250 L96 250 C90 210 86 150 92 108 C96 84 118 68 136 62
-       C140 70 145 75 150 78 Z`,
-      cloth.base,
-      { pattern: patt }
-    );
-    // right front panel
-    svg += piece(
-      `M150 78 C162 92 168 120 ${db ? 136 : 150} ${stanceY}
-       L${db ? 134 : 148} 250 L204 250 C210 210 214 150 208 108 C204 84 182 68 164 62
-       C160 70 155 75 150 78 Z`,
-      cloth.base,
-      { pattern: patt }
-    );
-    // front closure shadow
-    svg += `<path d="M${db ? 164 : 150} ${stanceY} L${db ? 166 : 151} 250" stroke="rgba(0,0,0,0.35)" stroke-width="1.2" fill="none"/>`;
+    /* closure + quarters + darts */
+    const closureX = db ? 164 : 150;
+    svg += `<path d="M${closureX} ${breakY} L ${closureX + (db ? 1 : 0.5)} 268" stroke="rgba(5,9,18,0.4)" stroke-width="1" fill="none"/>
+            <path d="M150 248 L145 272 L155 272 Z" fill="rgba(5,9,18,0.28)" stroke="none"/>`;
+    if (db) {
+      svg += `<path d="M172 110 L138 268" stroke="rgba(5,9,18,0.16)" stroke-width="1" fill="none"/>`;
+    }
+    svg += `<path d="M128 150 C 127 180 127 210 129 240 M172 150 C 173 180 173 210 171 240"
+              stroke="rgba(5,9,18,0.18)" stroke-width="0.8" fill="none"/>`;
 
     /* sleeves */
     svg += piece(
-      `M92 106 C80 116 72 168 70 224 C69 240 72 248 84 248 C94 248 96 240 97 226 C99 180 98 140 96 112 Z`,
-      cloth.base, { pattern: patt }
+      `M88 78 C 76 92 70 122 70 152 C 70 196 72 236 76 262
+       C 77 271 82 274 90 274 C 98 274 101 269 102 260
+       C 104 220 102 160 98 116 C 95 104 90 92 88 78 Z`,
+      "url(#gCloth)", { pattern: patt }
     );
     svg += piece(
-      `M208 106 C220 116 228 168 230 224 C231 240 228 248 216 248 C206 248 204 240 203 226 C201 180 202 140 204 112 Z`,
-      cloth.base, { pattern: patt }
+      `M212 78 C 224 92 230 122 230 152 C 230 196 228 236 224 262
+       C 223 271 218 274 210 274 C 202 274 199 269 198 260
+       C 196 220 198 160 202 116 C 205 104 210 92 212 78 Z`,
+      "url(#gCloth)", { pattern: patt }
     );
-    // sleeve buttons
-    svg += `<circle cx="84" cy="238" r="2" fill="${btnColor}"/><circle cx="84" cy="231" r="2" fill="${btnColor}"/>
-            <circle cx="216" cy="238" r="2" fill="${btnColor}"/><circle cx="216" cy="231" r="2" fill="${btnColor}"/>`;
+    svg += `<path d="M98 116 C 102 170 103 225 101 258 L 96 258 C 96 210 95 160 93 120 Z"
+              fill="rgba(5,9,18,0.2)" stroke="none"/>
+            <path d="M202 116 C 198 170 197 225 199 258 L 204 258 C 204 210 205 160 207 120 Z"
+              fill="rgba(5,9,18,0.2)" stroke="none"/>`;
+    svg += [250, 257, 264].map((y) => refinedButton(84, y, btnColor, 1.9)).join("");
+    svg += [250, 257, 264].map((y) => refinedButton(216, y, btnColor, 1.9)).join("");
 
-    /* collar + lapels */
-    const [lL, lR] = lapelPaths(design.style, design.lapel);
-    svg += piece(lL, cloth.light, { pattern: patt, strokeWidth: 1 });
-    svg += piece(lR, cloth.light, { pattern: patt, strokeWidth: 1 });
-    // collar
-    svg += piece(`M136 62 C142 70 146 74 150 78 C154 74 158 70 164 62 C158 58 142 58 136 62 Z`, cloth.dark, {});
+    /* lapels + collar */
+    svg += lapelMarkup(design.style, design.lapel, cloth, patt);
 
-    /* breast pocket square (lining colour accent) */
-    svg += `<path d="M97 148 l20 -2 l-2 10 l-17 1 Z" fill="${cloth.base}" stroke="rgba(0,0,0,0.3)"/>
-            <path d="M99 147 l7 -6 l4 5 l5 -4 l2 4 Z" fill="${liningColor}"/>`;
+    /* breast pocket: square first, welt over its base */
+    svg += `<path d="M117 150 l4 -6.5 l3.5 4.5 l4.5 -6 l3 5.5 l0.5 4.5 l-15 1.5 Z"
+              fill="${liningColor}" stroke="rgba(5,9,18,0.3)" stroke-width="0.5"/>
+            <path d="M114.5 153.5 L136 150.5" stroke="${cloth.dark}" stroke-width="3.6" stroke-linecap="round"/>`;
 
-    /* pockets + buttons */
+    /* hip pockets + front buttons */
     svg += pocketsMarkup(design.pockets, cloth, patt);
-    svg += buttonsMarkup(design.style, btnColor);
+    if (db) {
+      rows.forEach((y) => {
+        svg += refinedButton(137, y, btnColor) + refinedButton(163, y, btnColor);
+      });
+    } else {
+      rows.forEach((y) => { svg += refinedButton(150, y, btnColor); });
+    }
 
     /* monogram */
     if (design.monogram) {
-      svg += `<text x="150" y="414" text-anchor="middle" font-size="14"
+      svg += `<path d="M110 502 H132 M168 502 H190" stroke="rgba(157,184,240,0.4)" stroke-width="0.8"/>
+              <text x="150" y="507" text-anchor="middle" font-size="15"
                 fill="#c6cedd" font-family="Cormorant Garamond, Georgia, serif" font-style="italic"
                 letter-spacing="2">${escapeHtml(design.monogram)}</text>`;
     }
@@ -637,7 +719,13 @@
 
   function bindReveal() {
     const observed = $all(".section .container, .hero-inner");
-    observed.forEach((el) => el.classList.add("reveal"));
+    // stagger cards inside sections for a choreographed entrance
+    const items = $all(".service-card, .gallery-item, .stat, .faq-item");
+    items.forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 4) * 90}ms`;
+    });
+    const all = observed.concat(items);
+    all.forEach((el) => el.classList.add("reveal"));
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((en) => {
@@ -648,7 +736,17 @@
         }),
       { threshold: 0.12 }
     );
-    observed.forEach((el) => io.observe(el));
+    all.forEach((el) => io.observe(el));
+  }
+
+  function bindHeaderShrink() {
+    const header = $(".site-header");
+    if (!header) return;
+    window.addEventListener(
+      "scroll",
+      () => header.classList.toggle("scrolled", window.scrollY > 50),
+      { passive: true }
+    );
   }
 
   /* ---------------- init ---------------- */
@@ -661,6 +759,7 @@
     bindForm();
     bindLightbox();
     bindReveal();
+    bindHeaderShrink();
     applyLang(lang);
     renderSuit();
   });
