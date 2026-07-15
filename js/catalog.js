@@ -28,13 +28,20 @@ const CATALOG = {
      falls back to the illustrated SVG automatically.
      ------------------------------------------------------- */
   photoLayers: {
-    enabled: false,
+    enabled: true,
     base: "assets/photo-layers/",
+    // list every file that actually exists in assets/photo-layers/ —
+    // the site only requests files on this list (no 404 probing)
+    available: [
+      "base-sb2-navy.png"
+    ],
+    // `optional` layers are skipped silently when their image is missing;
+    // a missing base falls back to the illustrated preview.
     stack: [
       { id: "base", file: "base-{style}-{color}.png" },
-      { id: "vest", file: "vest-{color}.png", when: (d) => d.vest === "vest" },
-      { id: "lapel", file: "lapel-{lapel}-{style}-{color}.png" },
-      { id: "pockets", file: "pockets-{pockets}-{color}.png" }
+      { id: "vest", file: "vest-{color}.png", optional: true, when: (d) => d.vest === "vest" },
+      { id: "lapel", file: "lapel-{lapel}-{style}-{color}.png", optional: true },
+      { id: "pockets", file: "pockets-{pockets}-{color}.png", optional: true }
     ]
   },
 

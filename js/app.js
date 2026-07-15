@@ -417,16 +417,33 @@
 
   function photoLayerFiles() {
     const pl = CATALOG.photoLayers;
-    return pl.stack
-      .filter((l) => !l.when || l.when(design))
-      .map((l) =>
-        pl.base +
-        l.file
-          .replace("{style}", design.style)
-          .replace("{color}", design.color)
-          .replace("{lapel}", design.lapel)
-          .replace("{pockets}", design.pockets)
-      );
+    const files = [];
+    for (const l of pl.stack) {
+      if (l.when && !l.when(design)) continue;
+      const name = l.file
+        .replace("{style}", design.style)
+        .replace("{color}", design.color)
+        .replace("{lapel}", design.lapel)
+        .replace("{pockets}", design.pockets);
+      const listed = !pl.available || pl.available.includes(name);
+      if (!listed) {
+        if (!l.optional) return null; // no base photo for this combination
+        continue; // option not photographed yet — skip silently
+      }
+      const path = pl.base + name;
+      // bundled previews (artifacts) inject data URIs here
+      const data = window.__PHOTO_LAYER_DATA__ && window.__PHOTO_LAYER_DATA__[path];
+      files.push({ src: data || path, optional: !!l.optional });
+    }
+    return files;
+  }
+
+  function setPreviewCaption(photoMode) {
+    const cap = $(".preview-caption");
+    if (!cap) return;
+    const key = photoMode ? "cust.previewCaption.photo" : "cust.previewCaption";
+    cap.setAttribute("data-i18n", key);
+    cap.innerHTML = t(key);
   }
 
   function renderPhotoPreview() {
@@ -434,21 +451,36 @@
     const svgEl = $("#suitPreview");
     if (!wrap || !svgEl) return false;
     const files = photoLayerFiles();
+    if (!files || !files.length) {
+      wrap.hidden = true;
+      svgEl.style.display = "";
+      setPreviewCaption(false);
+      return false;
+    }
     wrap.innerHTML = files
-      .map((f, i) => `<img src="${f}" alt="" style="z-index:${i + 1}" draggable="false"/>`)
+      .map(
+        (f, i) =>
+          `<img src="${f.src}" alt="" style="z-index:${i + 1}" draggable="false" ${f.optional ? 'data-optional="1"' : ""}/>`
+      )
       .join("");
     let failed = false;
     $all("img", wrap).forEach((im) =>
       im.addEventListener("error", () => {
-        // any missing layer → fall back to the illustrated preview
+        if (im.dataset.optional) {
+          im.remove(); // this option has no photo yet — keep the rest of the stack
+          return;
+        }
+        // missing base → fall back to the illustrated preview
         if (failed) return;
         failed = true;
         wrap.hidden = true;
         svgEl.style.display = "";
+        setPreviewCaption(false);
       })
     );
     wrap.hidden = false;
     svgEl.style.display = "none";
+    setPreviewCaption(true);
     return true;
   }
 
