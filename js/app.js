@@ -444,6 +444,45 @@
     const key = photoMode ? "cust.previewCaption.photo" : "cust.previewCaption";
     cap.setAttribute("data-i18n", key);
     cap.innerHTML = t(key);
+    // offer a jump to the photographed combination when we're not on it
+    const jump = $("#photoJump");
+    if (jump) jump.hidden = photoMode || !firstPhotoTarget();
+  }
+
+  // first combination that has a real base photo, e.g. {style:"sb2", color:"navy"}
+  function firstPhotoTarget() {
+    const pl = CATALOG.photoLayers;
+    if (!pl || !pl.enabled || !pl.available) return null;
+    for (const name of pl.available) {
+      const m = name.match(/^base-([a-z0-9]+)-([a-z0-9]+)\.png$/);
+      if (m) return { style: m[1], color: m[2] };
+    }
+    return null;
+  }
+
+  function syncOptionButtons() {
+    Object.entries(OPTION_GROUPS).forEach(([groupId, prop]) => {
+      const group = $("#" + groupId);
+      if (!group) return;
+      $all("button", group).forEach((b) =>
+        b.classList.toggle("active", b.dataset.value === design[prop])
+      );
+    });
+  }
+
+  function bindPhotoJump() {
+    const jump = $("#photoJump");
+    if (!jump) return;
+    jump.addEventListener("click", () => {
+      const target = firstPhotoTarget();
+      if (!target) return;
+      design.style = target.style;
+      design.color = target.color;
+      save("csb-design", design);
+      syncOptionButtons();
+      renderSuit();
+      renderSummary();
+    });
   }
 
   function renderPhotoPreview() {
@@ -1019,6 +1058,7 @@
     bindOptionGroups();
     bindUnitToggle();
     bindForm();
+    bindPhotoJump();
     bindLightbox();
     bindReveal();
     bindHeaderShrink();

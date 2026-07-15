@@ -535,6 +535,29 @@ img, svg { max-width: 100%; display: block; }
 
 .preview-frame.pulse svg { animation: previewSettle 0.35s ease; }
 
+.photo-jump {
+  display: block;
+  margin: 0.7rem auto 0;
+  padding: 0.5rem 1.2rem;
+  background: rgba(47, 95, 208, 0.14);
+  border: 1px solid rgba(157, 184, 240, 0.4);
+  border-radius: 999px;
+  color: var(--accent-soft);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.photo-jump:hover {
+  background: rgba(47, 95, 208, 0.28);
+  border-color: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.photo-jump[hidden] { display: none; }
+
 .preview-caption {
   margin-top: 0.7rem;
   font-size: 0.75rem;
