@@ -184,6 +184,7 @@
         .join("");
     }
     renderLiningCaption();
+    if (typeof bindTilt === "function") bindTilt($("#optFabric"));
   }
 
   function renderLiningCaption() {
@@ -498,6 +499,14 @@
     }
 
     root.innerHTML = svg;
+
+    // settle animation on every change so the preview feels alive
+    const frame = $(".preview-frame");
+    if (frame) {
+      frame.classList.remove("pulse");
+      void frame.offsetWidth;
+      frame.classList.add("pulse");
+    }
   }
 
   function escapeHtml(s) {
@@ -739,6 +748,70 @@
     all.forEach((el) => io.observe(el));
   }
 
+  const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const COARSE_POINTER = window.matchMedia("(pointer: coarse)").matches;
+
+  function bindTilt(root) {
+    if (REDUCED_MOTION || COARSE_POINTER) return;
+    $all(".gallery-item, .fabric-card, .service-card", root).forEach((el) => {
+      if (el.dataset.tilt) return;
+      el.dataset.tilt = "1";
+      el.classList.add("tiltable");
+      el.addEventListener("mousemove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transition = "transform 0.12s ease";
+        el.style.transform =
+          `perspective(700px) rotateY(${(x * 5).toFixed(2)}deg) rotateX(${(y * -5).toFixed(2)}deg) translateY(-3px)`;
+      });
+      el.addEventListener("mouseleave", () => {
+        el.style.transition = "transform 0.35s ease";
+        el.style.transform = "";
+      });
+    });
+  }
+
+  function bindCounters() {
+    $all(".stat-num").forEach((el) => {
+      const raw = el.textContent;
+      const m = raw.match(/([\d,]+)/);
+      if (!m) return;
+      const target = parseInt(m[1].replace(/,/g, ""), 10);
+      if (REDUCED_MOTION || !isFinite(target)) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          io.unobserve(el);
+          const t0 = performance.now();
+          const DUR = 1400;
+          (function tick(now) {
+            const p = Math.min(1, (now - t0) / DUR);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = raw.replace(
+              m[1],
+              Math.round(target * eased).toLocaleString("en-US")
+            );
+            if (p < 1) requestAnimationFrame(tick);
+          })(t0);
+        });
+      }, { threshold: 0.6 });
+      io.observe(el);
+    });
+  }
+
+  function bindScrollThread() {
+    const thread = $("#scrollThread");
+    if (!thread) return;
+    const update = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      thread.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
   function bindHeaderShrink() {
     const header = $(".site-header");
     if (!header) return;
@@ -760,6 +833,9 @@
     bindLightbox();
     bindReveal();
     bindHeaderShrink();
+    bindTilt();
+    bindCounters();
+    bindScrollThread();
     applyLang(lang);
     renderSuit();
   });
