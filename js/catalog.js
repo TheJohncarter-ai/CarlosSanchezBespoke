@@ -18,6 +18,26 @@
    ========================================================= */
 
 const CATALOG = {
+  /* -------------------------------------------------------
+     Photo-layer preview (the path to a photoreal configurator).
+     Flip `enabled` to true once layer images exist under
+     assets/photo-layers/ — see the README in that folder for
+     the exact shot list, naming and export specs.
+     Layers compose bottom → top; {tokens} are filled from the
+     current design. If any layer image is missing the preview
+     falls back to the illustrated SVG automatically.
+     ------------------------------------------------------- */
+  photoLayers: {
+    enabled: false,
+    base: "assets/photo-layers/",
+    stack: [
+      { id: "base", file: "base-{style}-{color}.png" },
+      { id: "vest", file: "vest-{color}.png", when: (d) => d.vest === "vest" },
+      { id: "lapel", file: "lapel-{lapel}-{style}-{color}.png" },
+      { id: "pockets", file: "pockets-{pockets}-{color}.png" }
+    ]
+  },
+
   fabrics: [
     {
       id: "wool",

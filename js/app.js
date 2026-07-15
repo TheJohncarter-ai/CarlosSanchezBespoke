@@ -256,7 +256,19 @@
     if (opts.pattern) {
       out += `<path d="${d}" fill="url(#${opts.pattern})" stroke="none"/>`;
     }
+    if (opts.weave) {
+      // woven-cloth texture: fine twill diagonal + irregular yarn grain
+      out += `<path d="${d}" fill="url(#gTwill)" stroke="none"/>`;
+      out += `<path d="${d}" fill="url(#gGrain)" stroke="none"/>`;
+    }
     return out;
+  }
+
+  // soft fold: paired dark/light strokes read as a cloth wrinkle
+  function fold(d, strength) {
+    const k = strength || 1;
+    return `<path d="${d}" stroke="rgba(5,9,18,${0.14 * k})" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path d="${d}" transform="translate(0,-1.6)" stroke="rgba(255,255,255,${0.05 * k})" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
   }
 
   function suitDefs(cloth) {
@@ -287,6 +299,21 @@
         <stop offset="0" stop-color="#4a3423"/>
         <stop offset="1" stop-color="#241708"/>
       </linearGradient>
+      <pattern id="gTwill" patternUnits="userSpaceOnUse" width="3" height="3"
+               patternTransform="rotate(0)">
+        <path d="M0 3 L3 0" stroke="rgba(255,255,255,0.045)" stroke-width="0.7"/>
+      </pattern>
+      <pattern id="gGrain" patternUnits="userSpaceOnUse" width="46" height="46">
+        <rect width="46" height="46" fill="transparent"/>
+        <circle cx="7" cy="11" r="0.5" fill="rgba(255,255,255,0.06)"/>
+        <circle cx="21" cy="4" r="0.4" fill="rgba(0,0,0,0.10)"/>
+        <circle cx="33" cy="17" r="0.5" fill="rgba(255,255,255,0.05)"/>
+        <circle cx="12" cy="27" r="0.4" fill="rgba(0,0,0,0.08)"/>
+        <circle cx="39" cy="33" r="0.5" fill="rgba(255,255,255,0.06)"/>
+        <circle cx="26" cy="40" r="0.4" fill="rgba(0,0,0,0.10)"/>
+        <circle cx="4" cy="41" r="0.4" fill="rgba(255,255,255,0.05)"/>
+        <circle cx="43" cy="8" r="0.4" fill="rgba(0,0,0,0.08)"/>
+      </pattern>
     </defs>`;
   }
 
@@ -327,8 +354,8 @@
     }
 
     let out = "";
-    out += piece(leftLapel, "url(#gLapel)", { pattern: patt, strokeWidth: 0.9 });
-    out += piece(rightLapel, "url(#gLapel)", { pattern: patt, strokeWidth: 0.9 });
+    out += piece(leftLapel, "url(#gLapel)", { pattern: patt, weave: true, strokeWidth: 0.9 });
+    out += piece(rightLapel, "url(#gLapel)", { pattern: patt, weave: true, strokeWidth: 0.9 });
     if (leftCollar) {
       out += piece(leftCollar, cloth.dark, { strokeWidth: 0.7 });
       out += piece(rightCollar, cloth.dark, { strokeWidth: 0.7 });
@@ -386,9 +413,53 @@
             <path d="M176 512 C 184 512 194 515 200 519" stroke="rgba(255,255,255,0.16)" stroke-width="1" fill="none"/>`;
   }
 
+  /* ---- photo-layer preview (photoreal path; falls back to SVG) ---- */
+
+  function photoLayerFiles() {
+    const pl = CATALOG.photoLayers;
+    return pl.stack
+      .filter((l) => !l.when || l.when(design))
+      .map((l) =>
+        pl.base +
+        l.file
+          .replace("{style}", design.style)
+          .replace("{color}", design.color)
+          .replace("{lapel}", design.lapel)
+          .replace("{pockets}", design.pockets)
+      );
+  }
+
+  function renderPhotoPreview() {
+    const wrap = $("#photoPreview");
+    const svgEl = $("#suitPreview");
+    if (!wrap || !svgEl) return false;
+    const files = photoLayerFiles();
+    wrap.innerHTML = files
+      .map((f, i) => `<img src="${f}" alt="" style="z-index:${i + 1}" draggable="false"/>`)
+      .join("");
+    let failed = false;
+    $all("img", wrap).forEach((im) =>
+      im.addEventListener("error", () => {
+        // any missing layer → fall back to the illustrated preview
+        if (failed) return;
+        failed = true;
+        wrap.hidden = true;
+        svgEl.style.display = "";
+      })
+    );
+    wrap.hidden = false;
+    svgEl.style.display = "none";
+    return true;
+  }
+
   function renderSuit() {
     const root = $("#svgRoot");
     if (!root) return;
+
+    if (CATALOG.photoLayers && CATALOG.photoLayers.enabled) {
+      renderPhotoPreview();
+      // keep rendering the SVG below as the live fallback
+    }
 
     const cloth = CLOTH[design.color] || CLOTH.navy;
     const patt = design.pattern !== "solid" ? design.pattern : null;
@@ -407,12 +478,12 @@
     svg += piece(
       `M121 240 L149 240 C 150 268 150 296 150 322
        L 145 508 L 126 508 C 121 430 119 330 121 240 Z`,
-      "url(#gTrouser)", { pattern: patt }
+      "url(#gTrouser)", { pattern: patt, weave: true }
     );
     svg += piece(
       `M179 240 L151 240 C 150 268 150 296 150 322
        L 155 508 L 174 508 C 179 430 181 330 179 240 Z`,
-      "url(#gTrouser)", { pattern: patt }
+      "url(#gTrouser)", { pattern: patt, weave: true }
     );
     // gap between the legs
     svg += `<path d="M150 324 L146.5 508 L153.5 508 Z" fill="rgba(5,9,18,0.4)" stroke="none"/>`;
@@ -421,6 +492,12 @@
             <path d="M138 330 L137 504" stroke="rgba(5,9,18,0.3)" stroke-width="0.8" fill="none"/>
             <path d="M164 330 L165 504" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
             <path d="M162 330 L163 504" stroke="rgba(5,9,18,0.3)" stroke-width="0.8" fill="none"/>`;
+    // drape at the knees and calf
+    svg += fold("M128 398 C 133 402 140 402 144 399", 0.8);
+    svg += fold("M156 398 C 160 402 167 402 172 399", 0.8);
+    svg += fold("M129 448 C 133 451 139 451 143 449", 0.5);
+    svg += fold("M157 448 C 161 451 167 451 171 449", 0.5);
+
     if (design.trousers === "pleated") {
       svg += `<path d="M142 318 L143 336 M158 318 L157 336" stroke="rgba(5,9,18,0.4)" stroke-width="1.1" fill="none"/>`;
     }
@@ -449,7 +526,7 @@
        C 204 106 214 90 224 74
        C 208 64 188 56 168 49
        C 164 46 157 45 150 46 Z`,
-      "url(#gCloth)", { pattern: patt }
+      "url(#gCloth)", { pattern: patt, weave: true }
     );
     // side shading
     svg += `<path d="M102 122 C 106 176 111 250 118 306 L 126 313 C 119 250 115 176 112 126 Z"
@@ -489,23 +566,41 @@
     }
     svg += `<path d="M130 162 C 129 196 129 232 132 274 M170 162 C 171 196 171 232 168 274"
               stroke="rgba(5,9,18,0.18)" stroke-width="0.8" fill="none"/>`;
+    // tension folds pulling from the fastened button
+    const bx = rows[0];
+    svg += fold(`M${db ? 163 : 150} ${bx} C 143 ${bx + 7} 134 ${bx + 12} 126 ${bx + 13}`, 0.7);
+    svg += fold(`M${db ? 137 : 150} ${bx} C 157 ${bx + 7} 166 ${bx + 12} 174 ${bx + 13}`, 0.7);
+    // soft chest drape
+    svg += fold("M124 128 C 122 152 121 176 122 198", 0.5);
+    svg += fold("M176 128 C 178 152 179 176 178 198", 0.5);
+    // shadow the jacket casts on the trousers at the hem
+    svg += `<path d="M120 306 C 128 315 136 318 141 317 L 141 322 C 133 323 126 320 118 312 Z" fill="rgba(5,9,18,0.28)" stroke="none"/>
+            <path d="M180 306 C 172 315 164 318 159 317 L 159 322 C 167 323 174 320 182 312 Z" fill="rgba(5,9,18,0.28)" stroke="none"/>`;
 
     /* sleeves: hang at the sides, separate from the body below the armpit */
     svg += piece(
       `M76 74 C 64 92 58 118 57 148 C 55 198 60 262 66 316
        C 67 325 72 329 82 329 C 91 329 95 325 96 317
        C 100 260 100 200 100 124 C 96 106 86 90 76 74 Z`,
-      "url(#gCloth)", { pattern: patt }
+      "url(#gCloth)", { pattern: patt, weave: true }
     );
     svg += piece(
       `M224 74 C 236 92 242 118 243 148 C 245 198 240 262 234 316
        C 233 325 228 329 218 329 C 209 329 205 325 204 317
        C 200 260 200 200 200 124 C 204 106 214 90 224 74 Z`,
-      "url(#gCloth)", { pattern: patt }
+      "url(#gCloth)", { pattern: patt, weave: true }
     );
     // separation between arm and body (reads as the gap in the flat)
     svg += `<path d="M100 126 C 101 192 103 258 107 308" stroke="rgba(5,9,18,0.55)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
             <path d="M200 126 C 199 192 197 258 193 308" stroke="rgba(5,9,18,0.55)" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    // elbow drape
+    svg += fold("M62 210 C 68 214 76 215 82 212", 0.9);
+    svg += fold("M64 232 C 70 235 77 236 82 233", 0.6);
+    svg += fold("M238 210 C 232 214 224 215 218 212", 0.9);
+    svg += fold("M236 232 C 230 235 223 236 218 233", 0.6);
+    // shoulder roll highlight
+    svg += `<path d="M80 78 C 90 70 104 64 118 60" stroke="rgba(255,255,255,0.09)" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M220 78 C 210 70 196 64 182 60" stroke="rgba(255,255,255,0.09)" stroke-width="3" fill="none" stroke-linecap="round"/>`;
     // cuff buttons
     svg += [306, 313, 320].map((y) => refinedButton(70, y, btnColor, 1.8)).join("");
     svg += [306, 313, 320].map((y) => refinedButton(230, y, btnColor, 1.8)).join("");
@@ -519,6 +614,15 @@
     svg += lapelMarkup(design.style, design.lapel, cloth, patt);
     svg += piece(`M142 46 Q150 41.5 158 46 L 155 51.5 Q 150 49 145 51.5 Z`, cloth.dark, { strokeWidth: 0.7 });
 
+    // lapel roll: soft shadow along the breakline gives the fold depth
+    svg += `<path d="M147 60 C 143 110 143 150 ${db ? 160 : 147} ${breakY - 8}"
+              stroke="rgba(5,9,18,0.22)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <path d="M153 60 C 157 110 157 150 ${db ? 140 : 153} ${breakY - 8}"
+              stroke="rgba(5,9,18,0.22)" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+    // lapel buttonhole (wearer's left lapel = viewer left)
+    svg += `<path d="M133 112 L139 110" stroke="rgba(5,9,18,0.55)" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M133 112 L139 110" transform="translate(0,-0.9)" stroke="rgba(255,255,255,0.12)" stroke-width="0.6" stroke-linecap="round"/>`;
+
     /* breast welt + pocket square — wearer's left chest (viewer right) */
     svg += `<path d="M167 142 l4 -6.5 l3.5 4.5 l4.5 -6 l3 5.5 l0.5 4.5 l-15 1.5 Z"
               fill="${liningColor}" stroke="rgba(5,9,18,0.3)" stroke-width="0.5"/>
@@ -526,12 +630,21 @@
 
     /* hip pockets + front buttons */
     svg += pocketsMarkup(design.pockets, cloth, patt);
+    // shadow under the pocket flaps
+    if (design.pockets === "flap") {
+      svg += `<path d="M115 279 q17 5 34 0 l0 2 q-17 5 -34 0 Z" fill="rgba(5,9,18,0.3)" stroke="none"/>
+              <path d="M151 279 q17 5 34 0 l0 2 q-17 5 -34 0 Z" fill="rgba(5,9,18,0.3)" stroke="none"/>`;
+    }
     if (db) {
       rows.forEach((y) => {
+        svg += `<path d="M144 ${y} h5" stroke="rgba(5,9,18,0.4)" stroke-width="1"/>`;
         svg += refinedButton(138, y, btnColor) + refinedButton(162, y, btnColor);
       });
     } else {
-      rows.forEach((y) => { svg += refinedButton(150, y, btnColor); });
+      rows.forEach((y) => {
+        svg += `<path d="M153 ${y} h5" stroke="rgba(5,9,18,0.4)" stroke-width="1"/>`;
+        svg += refinedButton(150, y, btnColor);
+      });
     }
 
     /* monogram */
