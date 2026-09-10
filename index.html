@@ -137,7 +137,16 @@
         }
       },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding and ceremony tailoring", "description": "Morning coats, tuxedos and formalwear made to measure." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wardrobe consulting", "description": "Seasonal and travel wardrobes built to the client's life and climate." } }
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wardrobe consulting", "description": "Seasonal and travel wardrobes built to the client's life and climate." } },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "House-call fittings",
+          "description": "The tailor travels to the client's home, office or hotel with the full cloth library for measurement and fitting.",
+          "areaServed": { "@type": "City", "name": "Medellín" }
+        }
+      }
     ]
   }
   </script>
@@ -273,6 +282,7 @@
       </a>
 
       <nav class="main-nav" id="mainNav">
+        <a href="#housecalls" class="nav-highlight" data-i18n="nav.housecalls">House Calls</a>
         <a href="#about" data-i18n="nav.about">The Atelier</a>
         <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
         <a href="#customize" data-i18n="nav.customize">Design Your Suit</a>
@@ -308,6 +318,152 @@
       </div>
     </div>
     <div class="hero-rule"><span>✂</span></div>
+  </section>
+
+  <!-- ============ HOUSE CALLS ============ -->
+  <section class="house-calls" id="housecalls">
+    <div class="container house-calls-grid">
+      <div class="house-calls-copy">
+        <p class="eyebrow" data-i18n="hc.eyebrow">Door-to-Door Service</p>
+        <h2 class="house-calls-title" data-i18n="hc.title">We Come to You</h2>
+        <p class="house-calls-sub" data-i18n="hc.subtitle">
+          Skip the trip to El Poblado. Our master tailor arrives at your home, office
+          or hotel with the full atelier experience — fabric books, professional
+          measurement, and a fitting that takes as long as it needs to.
+        </p>
+        <ul class="house-calls-list">
+          <li data-i18n="hc.point1">The full cloth library, brought to your door</li>
+          <li data-i18n="hc.point2">Professional measurement and first fitting on-site</li>
+          <li data-i18n="hc.point3">Across Medellín and the greater Aburrá Valley</li>
+          <li data-i18n="hc.point4">By appointment — evenings and weekends available</li>
+        </ul>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary" data-i18n="hc.cta">Book a House Call</a>
+        </div>
+        <p class="house-calls-note" data-i18n="hc.note">A modest travel fee may apply outside El Poblado — ask when you book.</p>
+      </div>
+      <div class="house-calls-art" aria-hidden="true">
+        <svg class="house-calls-van" viewBox="0 0 900 420" role="img" aria-label="Illustration of the Carlos Sanchez Bespoke atelier van">
+
+  <defs>
+    <linearGradient id="vanBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#33456c"/>
+      <stop offset="0.45" stop-color="#1c2f57"/>
+      <stop offset="1" stop-color="#0a1424"/>
+    </linearGradient>
+    <linearGradient id="vanBodyLower" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#152645"/>
+      <stop offset="1" stop-color="#0a1424"/>
+    </linearGradient>
+    <linearGradient id="vanGlass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9db3d9"/>
+      <stop offset="1" stop-color="#2c3d5e"/>
+    </linearGradient>
+    <linearGradient id="vanChamp" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b99a5f"/>
+      <stop offset="0.5" stop-color="#f0e2bd"/>
+      <stop offset="1" stop-color="#b99a5f"/>
+    </linearGradient>
+    <radialGradient id="wheelG" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#41454f"/>
+      <stop offset="1" stop-color="#0a0c10"/>
+    </radialGradient>
+    <radialGradient id="hubG" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#dfe3ea"/>
+      <stop offset="1" stop-color="#8a90a0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="400" cy="382" rx="360" ry="14" fill="rgba(0,0,0,0.45)"/>
+
+  <!-- main body silhouette: long high-roof cargo van, side profile -->
+  <path d="M85 300
+           L85 130
+           C85 108 100 92 122 90
+           L510 90
+           C528 90 536 94 542 106
+           L566 158
+           C584 161 604 165 616 176
+           C628 187 634 202 634 218
+           L634 300
+           Z"
+        fill="url(#vanBody)" stroke="#060c18" stroke-width="2.5"/>
+
+  <!-- lower rocker panel -->
+  <path d="M85 300 L634 300 L634 320 C634 328 628 334 620 334 L99 334 C91 334 85 328 85 320 Z"
+        fill="url(#vanBodyLower)" stroke="#060c18" stroke-width="2"/>
+
+  <!-- wheel arches -->
+  <path d="M148 334 a62 62 0 0 1 124 0 Z" fill="#060c18"/>
+  <path d="M452 334 a62 62 0 0 1 124 0 Z" fill="#060c18"/>
+
+  <!-- windshield (raked, meeting the roofline cleanly) -->
+  <path d="M542 106 L566 156 L520 156 L502 110 Z" fill="url(#vanGlass)" stroke="#060c18" stroke-width="1.6"/>
+  <!-- front cab door window -->
+  <rect x="410" y="118" width="100" height="46" rx="6" fill="url(#vanGlass)" opacity="0.9" stroke="#060c18" stroke-width="1.4"/>
+  <!-- side mirror, ahead of the windshield -->
+  <path d="M566 150 L584 145 L588 156 L570 163 Z" fill="#0a1424" stroke="#060c18" stroke-width="1"/>
+
+  <!-- cargo side windows -->
+  <rect x="150" y="118" width="120" height="52" rx="6" fill="url(#vanGlass)" opacity="0.5" stroke="#060c18" stroke-width="1.2"/>
+  <rect x="290" y="118" width="100" height="52" rx="6" fill="url(#vanGlass)" opacity="0.5" stroke="#060c18" stroke-width="1.2"/>
+
+  <!-- roof + waist coachlines -->
+  <path d="M100 92 L510 92" stroke="url(#vanChamp)" stroke-width="2" opacity="0.5" fill="none"/>
+  <path d="M85 214 L634 214" stroke="url(#vanChamp)" stroke-width="2.5" opacity="0.85" fill="none"/>
+
+  <!-- door seams -->
+  <line x1="145" y1="98" x2="145" y2="300" stroke="#060c18" stroke-width="1.4" opacity="0.6"/>
+  <line x1="285" y1="98" x2="285" y2="300" stroke="#060c18" stroke-width="1.4" opacity="0.6"/>
+  <line x1="398" y1="98" x2="398" y2="300" stroke="#060c18" stroke-width="1.4" opacity="0.5"/>
+
+  <!-- crest badge + wordmark on the rear cargo panel -->
+  <g transform="translate(108,236) scale(0.6)">
+    <path d="M60 6 L98 19 Q110 23 110 36 C110 74 101 106 60 138 C19 106 10 74 10 36 Q10 23 22 19 Z"
+          fill="#0a1424" stroke="url(#vanChamp)" stroke-width="3.4"/>
+    <text x="60" y="86" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="52" fill="url(#vanChamp)">CS</text>
+  </g>
+  <text x="196" y="256" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="25" fill="#e8ebf1" letter-spacing="0.5">Carlos Sanchez</text>
+  <text x="196" y="275" font-family="Arial, sans-serif" font-size="10.5" letter-spacing="2.8" fill="url(#vanChamp)">A LA MEDIDA &#183; MEDELL&#205;N</text>
+
+  <!-- front headlight + grille, at the true front edge -->
+  <ellipse cx="623" cy="252" rx="10" ry="15" fill="#f3ead3" opacity="0.95"/>
+  <ellipse cx="623" cy="252" rx="5" ry="8" fill="#fffbf0"/>
+  <rect x="608" y="272" width="26" height="24" rx="3" fill="#0c1830" stroke="#060c18" stroke-width="1"/>
+  <line x1="608" y1="279" x2="632" y2="279" stroke="#2a3958" stroke-width="1.4"/>
+  <line x1="608" y1="286" x2="632" y2="286" stroke="#2a3958" stroke-width="1.4"/>
+  <!-- rear tail-light -->
+  <ellipse cx="92" cy="216" rx="6" ry="11" fill="#8f2b2b"/>
+
+  <!-- door handles, clear of text/badge -->
+  <rect x="215" y="228" width="20" height="4" rx="2" fill="#9aa6bf"/>
+  <rect x="355" y="228" width="20" height="4" rx="2" fill="#9aa6bf"/>
+
+  <!-- wheels -->
+  <g class="van-wheel" style="transform-origin: 210px 334px;">
+    <circle cx="210" cy="334" r="46" fill="url(#wheelG)" stroke="#050608" stroke-width="3"/>
+    <circle cx="210" cy="334" r="18" fill="url(#hubG)" stroke="#4a4f5c" stroke-width="1.5"/>
+    <g stroke="#3a3f4a" stroke-width="2.4">
+      <line x1="210" y1="320" x2="210" y2="348"/>
+      <line x1="196" y1="334" x2="224" y2="334"/>
+      <line x1="200" y1="324" x2="220" y2="344"/>
+      <line x1="220" y1="324" x2="200" y2="344"/>
+    </g>
+  </g>
+  <g class="van-wheel" style="transform-origin: 514px 334px;">
+    <circle cx="514" cy="334" r="46" fill="url(#wheelG)" stroke="#050608" stroke-width="3"/>
+    <circle cx="514" cy="334" r="18" fill="url(#hubG)" stroke="#4a4f5c" stroke-width="1.5"/>
+    <g stroke="#3a3f4a" stroke-width="2.4">
+      <line x1="514" y1="320" x2="514" y2="348"/>
+      <line x1="500" y1="334" x2="528" y2="334"/>
+      <line x1="504" y1="324" x2="524" y2="344"/>
+      <line x1="524" y1="324" x2="504" y2="344"/>
+    </g>
+  </g>
+
+        </svg>
+      </div>
+    </div>
   </section>
 
   <!-- ============ ABOUT ============ -->

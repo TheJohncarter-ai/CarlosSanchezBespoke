@@ -1305,6 +1305,23 @@
       { threshold: 0.12 }
     );
     all.forEach((el) => io.observe(el));
+
+    // house-calls van: drive-in + wheel spin, triggered once, independent of
+    // the generic .reveal fade above (the section itself stays fully opaque)
+    const houseCalls = $(".house-calls");
+    if (houseCalls) {
+      const vanIo = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              houseCalls.classList.add("in-view");
+              vanIo.unobserve(en.target);
+            }
+          }),
+        { threshold: 0.35 }
+      );
+      vanIo.observe(houseCalls);
+    }
   }
 
   const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
