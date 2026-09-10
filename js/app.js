@@ -124,7 +124,7 @@
 
   /* ---------------- preloader ---------------- */
 
-  const PRELOADER_MIN_MS = 2000;
+  const PRELOADER_MIN_MS = 2500;
   const preloaderStart = Date.now();
 
   function finishPreloader() {
