@@ -460,38 +460,66 @@
 
   /* ---- photo-layer preview (photoreal path; falls back to SVG) ---- */
 
+  let previewMode = load("csb-preview") || "photo";
+
+  // exact style+colour photo, else the nearest photographed garment in that colour
+  function findBasePhoto() {
+    const pl = CATALOG.photoLayers;
+    if (!pl || !pl.enabled || !pl.available) return null;
+    const exact = `base-${design.style}-${design.color}.png`;
+    if (pl.available.includes(exact)) return { name: exact, approx: false };
+    for (const st of ["sb2", "sb3", "db"]) {
+      const n = `base-${st}-${design.color}.png`;
+      if (pl.available.includes(n)) return { name: n, approx: true };
+    }
+    return null;
+  }
+
   function photoLayerFiles() {
     const pl = CATALOG.photoLayers;
+    const base = findBasePhoto();
+    if (!base) return null;
     const files = [];
     for (const l of pl.stack) {
       if (l.when && !l.when(design)) continue;
-      const name = l.file
-        .replace("{style}", design.style)
-        .replace("{color}", design.color)
-        .replace("{lapel}", design.lapel)
-        .replace("{pockets}", design.pockets);
-      const listed = !pl.available || pl.available.includes(name);
-      if (!listed) {
-        if (!l.optional) return null; // no base photo for this combination
-        continue; // option not photographed yet — skip silently
+      let name;
+      if (l.id === "base") name = base.name;
+      else {
+        name = l.file
+          .replace("{style}", design.style)
+          .replace("{color}", design.color)
+          .replace("{lapel}", design.lapel)
+          .replace("{pockets}", design.pockets);
+        if (!pl.available.includes(name)) continue; // option not photographed yet — skip silently
       }
       const path = pl.base + name;
       // bundled previews (artifacts) inject data URIs here
       const data = window.__PHOTO_LAYER_DATA__ && window.__PHOTO_LAYER_DATA__[path];
-      files.push({ src: data || path, optional: !!l.optional });
+      files.push({ src: data || path, optional: l.id !== "base" });
     }
+    files.approx = base.approx;
     return files;
   }
 
-  function setPreviewCaption(photoMode) {
+  function setPreviewCaption(mode) {
+    // mode: "photo" | "approx" | "illustration"
     const cap = $(".preview-caption");
-    if (!cap) return;
-    const key = photoMode ? "cust.previewCaption.photo" : "cust.previewCaption";
-    cap.setAttribute("data-i18n", key);
-    cap.innerHTML = t(key);
-    // offer a jump to the photographed combination when we're not on it
+    if (cap) {
+      const key = mode === "photo" ? "cust.previewCaption.photo"
+        : mode === "approx" ? "cust.previewCaption.approx" : "cust.previewCaption";
+      cap.setAttribute("data-i18n", key);
+      cap.innerHTML = t(key);
+    }
+    const hasPhoto = !!findBasePhoto();
+    const toggle = $("#previewToggle");
+    if (toggle) {
+      toggle.hidden = !hasPhoto;
+      $all(".pt-btn", toggle).forEach((b) =>
+        b.classList.toggle("active", b.dataset.mode === (mode === "illustration" ? "illustration" : "photo"))
+      );
+    }
     const jump = $("#photoJump");
-    if (jump) jump.hidden = photoMode || !firstPhotoTarget();
+    if (jump) jump.hidden = hasPhoto || !firstPhotoTarget();
   }
 
   // first combination that has a real base photo, e.g. {style:"sb2", color:"navy"}
@@ -517,54 +545,56 @@
 
   function bindPhotoJump() {
     const jump = $("#photoJump");
-    if (!jump) return;
-    jump.addEventListener("click", () => {
-      const target = firstPhotoTarget();
-      if (!target) return;
-      design.style = target.style;
-      design.color = target.color;
-      save("csb-design", design);
-      syncOptionButtons();
-      renderSuit();
-      renderSummary();
-    });
+    if (jump) {
+      jump.addEventListener("click", () => {
+        const target = firstPhotoTarget();
+        if (!target) return;
+        design.style = target.style;
+        design.color = target.color;
+        save("csb-design", design);
+        syncOptionButtons();
+        renderSuit();
+        renderSummary();
+      });
+    }
+    $all("#previewToggle .pt-btn").forEach((b) =>
+      b.addEventListener("click", () => {
+        previewMode = b.dataset.mode;
+        save("csb-preview", previewMode);
+        renderSuit();
+      })
+    );
+  }
+
+  function showIllustration() {
+    const wrap = $("#photoPreview");
+    const svgEl = $("#suitPreview");
+    if (wrap) wrap.hidden = true;
+    if (svgEl) svgEl.style.display = "";
+    setPreviewCaption("illustration");
   }
 
   function renderPhotoPreview() {
     const wrap = $("#photoPreview");
     const svgEl = $("#suitPreview");
     if (!wrap || !svgEl) return false;
-    const files = photoLayerFiles();
-    if (!files || !files.length) {
-      wrap.hidden = true;
-      svgEl.style.display = "";
-      setPreviewCaption(false);
-      return false;
-    }
+    const files = previewMode === "photo" ? photoLayerFiles() : null;
+    if (!files || !files.length) { showIllustration(); return false; }
     wrap.innerHTML = files
-      .map(
-        (f, i) =>
-          `<img src="${f.src}" alt="" style="z-index:${i + 1}" draggable="false" ${f.optional ? 'data-optional="1"' : ""}/>`
-      )
+      .map((f, i) => `<img src="${f.src}" alt="" style="z-index:${i + 1}" draggable="false" ${f.optional ? 'data-optional="1"' : ""}/>`)
       .join("");
     let failed = false;
     $all("img", wrap).forEach((im) =>
       im.addEventListener("error", () => {
-        if (im.dataset.optional) {
-          im.remove(); // this option has no photo yet — keep the rest of the stack
-          return;
-        }
-        // missing base → fall back to the illustrated preview
+        if (im.dataset.optional) { im.remove(); return; }
         if (failed) return;
         failed = true;
-        wrap.hidden = true;
-        svgEl.style.display = "";
-        setPreviewCaption(false);
+        showIllustration();
       })
     );
     wrap.hidden = false;
     svgEl.style.display = "none";
-    setPreviewCaption(true);
+    setPreviewCaption(files.approx ? "approx" : "photo");
     return true;
   }
 

@@ -32,8 +32,11 @@ const CATALOG = {
     base: "assets/photo-layers/",
     // list every file that actually exists in assets/photo-layers/ —
     // the site only requests files on this list (no 404 probing)
+    // navy is the atelier photograph; the other colours are the same
+    // garment with the cloth re-tinted (shirt, tie and form untouched)
     available: [
-      "base-sb2-navy.png"
+      "base-sb2-navy.png", "base-sb2-charcoal.png", "base-sb2-black.png", "base-sb2-grey.png",
+      "base-sb2-brown.png", "base-sb2-burgundy.png", "base-sb2-olive.png", "base-sb2-cream.png"
     ],
     // `optional` layers are skipped silently when their image is missing;
     // a missing base falls back to the illustrated preview.

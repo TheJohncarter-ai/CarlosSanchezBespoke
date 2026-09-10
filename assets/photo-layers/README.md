@@ -6,6 +6,21 @@ Flip `photoLayers.enabled` to `true` in `js/catalog.js` to activate.
 If any image is missing, the site falls back to the illustration automatically —
 so you can add photos gradually, starting with one suit.
 
+## What is in this folder today
+
+- `base-sb2-navy.png` — the navy three-piece from the atelier collage,
+  isolated from its background (IS-Net segmentation, edge-refined).
+- `base-sb2-{charcoal,black,grey,brown,burgundy,olive,cream}.png` — the **same
+  photograph with only the cloth re-tinted** (shirt, tie, pocket square and the
+  form are untouched; every fold and highlight is preserved). They stand in
+  until real garments in those cloths are photographed — a real photo with the
+  same file name replaces one automatically.
+
+The site shows the exact style/colour photo when it exists; otherwise the
+nearest photographed garment in that colour, with a caption saying so and a
+Photograph / Illustration toggle so the client can still see their exact cut.
+
+
 ## How to shoot (consistency is everything)
 
 - Same **mannequin/bust**, same **camera position** (tripod, ~2.5 m back,
