@@ -45,6 +45,18 @@ const CATALOG = {
     ]
   },
 
+  /* Indicative pricing shown live in the Design Room (USD).
+     PLACEHOLDER VALUES — Carlos should confirm these before launch.
+     base = two-piece in house wool; modifiers add to it. */
+  pricing: {
+    currency: "USD",
+    base: 1200,
+    fabric: { wool: 0, linen: -100, cotton: -200, cashmere: 650, tropical: 150, flannel: 200 },
+    vest: 350,
+    doubleBreasted: 120,
+    pattern: 60
+  },
+
   fabrics: [
     {
       id: "wool",

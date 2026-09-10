@@ -11,23 +11,59 @@
 
   /* ---------------- state ---------------- */
 
+  const DESIGN_DEFAULTS = {
+    fabric: "wool",
+    color: "navy",
+    pattern: "solid",
+    style: "sb2",
+    lapel: "notch",
+    vents: "double",
+    pockets: "flap",
+    buttons: "darkhorn",
+    lining: "burgundy",
+    trousers: "flat",
+    hem: "plain",
+    vest: "none",
+    monogram: ""
+  };
+  const DESIGN_KEYS = Object.keys(DESIGN_DEFAULTS);
+  const DESIGN_VALID = {
+    fabric: ["wool", "linen", "cotton", "cashmere", "tropical", "flannel"],
+    color: ["navy", "charcoal", "black", "grey", "brown", "burgundy", "olive", "cream"],
+    pattern: ["solid", "pinstripe", "windowpane", "herringbone"],
+    style: ["sb2", "sb3", "db"],
+    lapel: ["notch", "peak", "shawl"],
+    vents: ["none", "single", "double"],
+    pockets: ["flap", "jetted", "patch"],
+    buttons: ["darkhorn", "naturalhorn", "pearl", "brass"],
+    lining: ["burgundy", "royal", "gold", "emerald", "plum", "black"],
+    trousers: ["flat", "pleated"],
+    hem: ["plain", "cuffed"],
+    vest: ["none", "vest"]
+  };
+
+  // ?d=fabric.color.pattern.style.lapel.vents.pockets.buttons.lining.trousers.hem.vest.monogram
+  function decodeDesign(str) {
+    if (!str) return null;
+    const parts = str.split(".");
+    const out = {};
+    DESIGN_KEYS.forEach((k, i) => {
+      const v = parts[i];
+      if (v == null) return;
+      if (k === "monogram") out[k] = decodeURIComponent(v).slice(0, 4);
+      else if (DESIGN_VALID[k].includes(v)) out[k] = v;
+    });
+    return out;
+  }
+  function encodeDesign(d) {
+    return DESIGN_KEYS.map((k) => (k === "monogram" ? encodeURIComponent(d[k] || "") : d[k])).join(".");
+  }
+
   const design = Object.assign(
-    {
-      fabric: "wool",
-      color: "navy",
-      pattern: "solid",
-      style: "sb2",
-      lapel: "notch",
-      vents: "double",
-      pockets: "flap",
-      buttons: "darkhorn",
-      lining: "burgundy",
-      trousers: "flat",
-      hem: "plain",
-      vest: "none",
-      monogram: ""
-    },
-    load("csb-design")
+    {},
+    DESIGN_DEFAULTS,
+    load("csb-design"),
+    decodeDesign(new URLSearchParams(window.location.search).get("d"))
   );
 
   let unit = load("csb-unit") || "in";
@@ -143,6 +179,7 @@
       const url = new URL(window.location.href);
       if (lang === "en") url.searchParams.delete("lang");
       else url.searchParams.set("lang", lang);
+      if (url.searchParams.has("d")) url.searchParams.set("d", encodeDesign(design));
       history.replaceState(null, "", url);
     } catch (e) { /* file:// or older browsers */ }
 
@@ -222,10 +259,8 @@
         if (!btn) return;
         design[prop] = btn.dataset.value;
         $all("button", group).forEach((b) => b.classList.toggle("active", b === btn));
-        save("csb-design", design);
-        renderSuit();
-        renderSummary();
         if (prop === "lining") renderLiningCaption();
+        onDesignChange();
       });
     });
 
@@ -234,11 +269,21 @@
       mono.value = design.monogram || "";
       mono.addEventListener("input", () => {
         design.monogram = mono.value.trim();
-        save("csb-design", design);
-        renderSuit();
-        renderSummary();
+        onDesignChange();
       });
     }
+  }
+
+  function onDesignChange() {
+    save("csb-design", design);
+    renderSuit();
+    renderSummary();
+    // keep the address bar shareable once a design has been touched
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("d", encodeDesign(design));
+      history.replaceState(null, "", url);
+    } catch (e) { /* file:// */ }
   }
 
   /* ---------------- SVG suit preview ---------------- */
@@ -772,15 +817,151 @@
       .join("\n");
   }
 
+  let lastSummary = {};
+
   function renderSummary() {
-    const list = $("#summaryList");
-    if (!list) return;
-    list.innerHTML = SUMMARY_ROWS
+    const rows = SUMMARY_ROWS.map(([key, val]) => [key, val()]);
+    const html = rows
       .map(
-        ([key, val]) =>
-          `<li><span class="k">${t(key)}</span><span class="v">${escapeHtml(val())}</span></li>`
+        ([key, v]) =>
+          `<li class="${lastSummary[key] != null && lastSummary[key] !== v ? "changed" : ""}">
+             <span class="k">${t(key)}</span><span class="v">${escapeHtml(v)}</span></li>`
       )
       .join("");
+    $all(".summary-list").forEach((list) => { list.innerHTML = html; });
+    rows.forEach(([key, v]) => { lastSummary[key] = v; });
+    renderPrice();
+
+    const sub = $("#designBarSub");
+    if (sub) {
+      const f = fabricById(design.fabric);
+      sub.textContent = `${t("cust.color." + design.color)} · ${t("cust.style." + design.style)} · ${t(f.nameKey)}`;
+    }
+  }
+
+  /* indicative price — table lives in js/catalog.js (owner-editable) */
+  function estimatePrice() {
+    const pr = CATALOG.pricing;
+    if (!pr) return null;
+    let total = pr.base + (pr.fabric[design.fabric] || 0);
+    if (design.vest === "vest") total += pr.vest;
+    if (design.style === "db") total += pr.doubleBreasted;
+    if (design.pattern !== "solid") total += pr.pattern;
+    return total;
+  }
+
+  function renderPrice() {
+    const total = estimatePrice();
+    $all("[data-price]").forEach((el) => {
+      el.textContent = total == null ? "" :
+        t("cust.priceFrom") + " " + total.toLocaleString(lang === "en" ? "en-US" : lang, {
+          style: "currency", currency: CATALOG.pricing.currency, maximumFractionDigits: 0
+        });
+    });
+  }
+
+  /* stepped configurator */
+  let step = 0;
+  function showStep(next, dir) {
+    const panels = $all(".step-panel");
+    if (!panels.length) return;
+    step = Math.max(0, Math.min(panels.length - 1, next));
+    panels.forEach((p) => {
+      const on = Number(p.dataset.step) === step;
+      p.classList.toggle("active", on);
+      p.classList.toggle("back", on && dir < 0);
+    });
+    $all(".step-btn").forEach((b) => {
+      const i = Number(b.dataset.step);
+      b.classList.toggle("active", i === step);
+      b.classList.toggle("done", i < step);
+    });
+    const prog = $("#stepProgress");
+    if (prog) prog.style.width = ((step + 1) / panels.length) * 100 + "%";
+    const back = $("#stepBack");
+    const nxt = $("#stepNext");
+    if (back) back.disabled = step === 0;
+    if (nxt) {
+      const last = step === panels.length - 1;
+      nxt.setAttribute("data-i18n", last ? "cust.next" : "cust.nextStep");
+      nxt.textContent = t(last ? "cust.next" : "cust.nextStep");
+    }
+    save("csb-step", step);
+  }
+
+  function bindSteps() {
+    $all(".step-btn").forEach((b) =>
+      b.addEventListener("click", () => showStep(Number(b.dataset.step), Number(b.dataset.step) > step ? 1 : -1))
+    );
+    const back = $("#stepBack");
+    const nxt = $("#stepNext");
+    if (back) back.addEventListener("click", () => showStep(step - 1, -1));
+    if (nxt) nxt.addEventListener("click", () => {
+      if (step === $all(".step-panel").length - 1) {
+        const m = $("#measurements");
+        if (m) m.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+      showStep(step + 1, 1);
+      // on phones keep the options in view under the sticky preview
+      if (window.matchMedia("(max-width: 820px)").matches) {
+        const nav = $(".step-nav");
+        if (nav) nav.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    const saved = load("csb-step");
+    showStep(typeof saved === "number" ? saved : 0, 1);
+  }
+
+  /* share link, reset, mobile bar + sheet */
+  function bindDesignActions() {
+    $all("[data-share-design]").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        const url = new URL(window.location.href);
+        url.hash = "customize";
+        url.searchParams.set("d", encodeDesign(design));
+        const link = url.toString();
+        try {
+          await navigator.clipboard.writeText(link);
+        } catch (e) {
+          window.prompt(t("cust.share"), link);
+        }
+        const label = btn.textContent;
+        btn.textContent = t("cust.shared");
+        btn.classList.add("done");
+        setTimeout(() => { btn.textContent = label; btn.classList.remove("done"); }, 2200);
+      })
+    );
+    $all("[data-reset-design]").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        Object.assign(design, DESIGN_DEFAULTS);
+        const mono = $("#monogram");
+        if (mono) mono.value = "";
+        syncOptionButtons();
+        renderCatalogUI();
+        onDesignChange();
+        showStep(0, -1);
+      })
+    );
+
+    const bar = $("#designBar");
+    const sheet = $("#designSheet");
+    const section = $("#customize");
+    if (bar && section) {
+      bar.hidden = false;
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((en) => bar.classList.toggle("show", en.isIntersecting)),
+        { threshold: 0.08 }
+      );
+      io.observe(section);
+    }
+    if (bar && sheet) {
+      const open = () => { sheet.hidden = false; document.body.style.overflow = "hidden"; };
+      const close = () => { sheet.hidden = true; document.body.style.overflow = ""; };
+      $("#designBarOpen").addEventListener("click", open);
+      $all("[data-sheet-close]", sheet).forEach((el) => el.addEventListener("click", close));
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !sheet.hidden) close(); });
+    }
   }
 
   /* ---------------- measurements ---------------- */
@@ -800,6 +981,29 @@
     });
   }
 
+  // plausible adult ranges in inches — outside → gentle "double-check" hint
+  const MEAS_RANGE = {
+    neck: [12, 22], chest: [30, 60], waist: [24, 58], shoulders: [14, 24], sleeve: [20, 30],
+    jacketLength: [24, 36], wrist: [5, 10], trouserWaist: [24, 58], hips: [30, 60],
+    thigh: [16, 34], inseam: [24, 40], outseam: [34, 50], height: [55, 84]
+  };
+
+  function measWarning(f, val) {
+    if (val == null || isNaN(val)) return false;
+    const r = MEAS_RANGE[f];
+    if (!r) return false;
+    const inches = unit === "in" ? val : val / IN_TO_CM;
+    return inches < r[0] || inches > r[1];
+  }
+
+  function renderMeasProgress() {
+    const done = MEAS_FIELDS.filter((f) => measurements[f] != null && !isNaN(measurements[f])).length;
+    const txt = $("#measProgressText");
+    const fill = $("#measProgressFill");
+    if (txt) txt.textContent = t("meas.progress").replace("{n}", done).replace("{total}", MEAS_FIELDS.length);
+    if (fill) fill.style.width = (done / MEAS_FIELDS.length) * 100 + "%";
+  }
+
   function renderMeasurements() {
     const grid = $("#measGrid");
     if (!grid) return;
@@ -807,8 +1011,9 @@
       const rows = group.fields.map((f) => {
         const val = measurements[f] != null ? measurements[f] : "";
         const cm = toCm(val);
+        const warn = measWarning(f, measurements[f]);
         return `
-        <div class="meas-row">
+        <div class="meas-row ${cm != null ? "filled" : ""} ${warn ? "warn" : ""}" data-row="${f}">
           <div class="meas-label">
             ${t("meas." + f)}
             <small>${t("meas." + f + ".hint")}</small>
@@ -820,10 +1025,12 @@
                title="${t("meas.colHint")}">
             ${cm == null ? "— cm" : `${fmt(cm)} <span class="unit">cm</span>`}
           </div>
+          <p class="meas-warn" ${warn ? "" : "hidden"}>${t("meas.warn")}</p>
         </div>`;
       }).join("");
       return `<h3 class="meas-group-title">${t("meas.group." + group.key)}</h3>${rows}`;
     }).join("");
+    renderMeasProgress();
 
     $all(".meas-input", grid).forEach((input) => {
       input.addEventListener("input", () => {
@@ -835,6 +1042,12 @@
         const cm = toCm(measurements[f]);
         cell.classList.toggle("empty", cm == null);
         cell.innerHTML = cm == null ? "— cm" : `${fmt(cm)} <span class="unit">cm</span>`;
+        const row = $(`[data-row="${f}"]`, grid);
+        const warn = measWarning(f, measurements[f]);
+        row.classList.toggle("warn", warn);
+        row.classList.toggle("filled", cm != null);
+        $(".meas-warn", row).hidden = !warn;
+        renderMeasProgress();
       });
     });
   }
@@ -891,6 +1104,17 @@
     if (!form) return;
     form.addEventListener("submit", (e) => {
       e.preventDefault();
+      const status = $("#formStatus");
+      const nameEl = form.elements.name;
+      const emailEl = form.elements.email;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim());
+      nameEl.classList.toggle("invalid", !nameEl.value.trim());
+      emailEl.classList.toggle("invalid", !emailOk);
+      if (!nameEl.value.trim() || !emailOk) {
+        if (status) { status.textContent = t("contact.invalid"); status.className = "form-status error"; status.hidden = false; }
+        (!nameEl.value.trim() ? nameEl : emailEl).focus();
+        return;
+      }
       const data = new FormData(form);
       const attach = $("#attachDesign").checked;
       let body = `${data.get("name") || ""} <${data.get("email") || ""}>\n\n${data.get("message") || ""}\n`;
@@ -904,12 +1128,15 @@
         "?subject=" + encodeURIComponent("Quote request — Carlos Sanchez Bespoke") +
         "&body=" + encodeURIComponent(body);
       window.location.href = mailto;
-      const status = $("#formStatus");
       if (status) {
         status.textContent = t("contact.sent");
+        status.className = "form-status";
         status.hidden = false;
       }
     });
+    ["name", "email"].forEach((n) =>
+      form.elements[n].addEventListener("input", () => form.elements[n].classList.remove("invalid"))
+    );
   }
 
   /* ---------------- nav / language / reveal ---------------- */
@@ -932,26 +1159,56 @@
     const box = $("#lightbox");
     const img = $("#lightboxImg");
     if (!box || !img) return;
+    const items = $all(".gallery-item");
+    if (!items.length) return;
+    let index = 0;
 
-    $all(".gallery-item").forEach((fig) => {
-      fig.addEventListener("click", () => {
-        const thumb = $("img", fig);
-        img.src = fig.dataset.full || (thumb && thumb.src) || "";
-        img.alt = (thumb && thumb.alt) || "";
-        box.hidden = false;
-        document.body.style.overflow = "hidden";
+    function show(i) {
+      index = (i + items.length) % items.length;
+      const fig = items[index];
+      const thumb = $("img", fig);
+      const cap = $("figcaption", fig);
+      img.src = fig.dataset.full || (thumb && thumb.src) || "";
+      img.alt = (thumb && thumb.alt) || "";
+      $("#lightboxCaption").textContent = cap ? cap.textContent.trim() : "";
+      $("#lightboxCount").textContent = `${index + 1} / ${items.length}`;
+      // preload neighbours for instant paging
+      [index + 1, index - 1].forEach((n) => {
+        const f = items[(n + items.length) % items.length];
+        const pre = new Image();
+        pre.src = f.dataset.full || ($("img", f) || {}).src || "";
       });
-    });
-
+    }
+    function open(i) {
+      show(i);
+      box.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
     function close() {
       box.hidden = true;
       img.src = "";
       document.body.style.overflow = "";
     }
-    box.addEventListener("click", close);
+
+    items.forEach((fig, i) => fig.addEventListener("click", () => open(i)));
+    $(".lightbox-close", box).addEventListener("click", close);
+    $(".lightbox-prev", box).addEventListener("click", (e) => { e.stopPropagation(); show(index - 1); });
+    $(".lightbox-next", box).addEventListener("click", (e) => { e.stopPropagation(); show(index + 1); });
+    box.addEventListener("click", (e) => { if (e.target === box) close(); });
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !box.hidden) close();
+      if (box.hidden) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") show(index + 1);
+      if (e.key === "ArrowLeft") show(index - 1);
     });
+    let touchX = null;
+    box.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    box.addEventListener("touchend", (e) => {
+      if (touchX == null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      touchX = null;
+      if (Math.abs(dx) > 40) show(dx < 0 ? index + 1 : index - 1);
+    }, { passive: true });
   }
 
   function bindReveal() {
@@ -1056,6 +1313,8 @@
     bindNav();
     renderCatalogUI();
     bindOptionGroups();
+    bindSteps();
+    bindDesignActions();
     bindUnitToggle();
     bindForm();
     bindPhotoJump();
