@@ -1,38 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 148">
   <defs>
     <linearGradient id="crestSilver" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#eef1f6"/>
-      <stop offset="0.5" stop-color="#b9c3d4"/>
-      <stop offset="1" stop-color="#8b98af"/>
-    </linearGradient>
-    <linearGradient id="crestRoyal" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3e6fdd"/>
-      <stop offset="1" stop-color="#1d3f96"/>
+      <stop offset="0" stop-color="#f2f4f8"/>
+      <stop offset="0.55" stop-color="#c6cedd"/>
+      <stop offset="1" stop-color="#93a0b8"/>
     </linearGradient>
     <linearGradient id="crestNavy" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#152647"/>
+      <stop offset="0" stop-color="#182b52"/>
       <stop offset="1" stop-color="#0a1424"/>
+    </linearGradient>
+    <linearGradient id="crestChampagne" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8d9b5"/>
+      <stop offset="1" stop-color="#b99a5f"/>
     </linearGradient>
   </defs>
 
-  <!-- side flourishes -->
-  <path d="M18 44 C6 50 2 64 8 76 C12 84 20 88 26 86 C18 80 14 70 18 60 Z"
-        fill="url(#crestRoyal)" opacity="0.9"/>
-  <path d="M102 44 C114 50 118 64 112 76 C108 84 100 88 94 86 C102 80 106 70 102 60 Z"
-        fill="url(#crestRoyal)" opacity="0.9"/>
-  <path d="M14 92 C8 100 10 112 20 116 C16 108 16 100 22 94 Z"
-        fill="url(#crestSilver)" opacity="0.85"/>
-  <path d="M106 92 C112 100 110 112 100 116 C104 108 104 100 98 94 Z"
-        fill="url(#crestSilver)" opacity="0.85"/>
+  <path d="M60 6 L98 19 Q110 23 110 36
+           C110 74 101 106 60 138
+           C19 106 10 74 10 36
+           Q10 23 22 19 Z"
+        fill="url(#crestNavy)" stroke="url(#crestSilver)" stroke-width="2.6"/>
 
-  <!-- shield -->
-  <path d="M60 8 L102 20 V72 C102 103 85 122 60 132 C35 122 18 103 18 72 V20 Z"
-        fill="url(#crestNavy)" stroke="url(#crestSilver)" stroke-width="3"/>
-  <path d="M60 16 L94 26 V71 C94 97 80 113 60 122 C40 113 26 97 26 71 V26 Z"
-        fill="none" stroke="url(#crestRoyal)" stroke-width="1.4" opacity="0.85"/>
+  <path d="M60 15 L91 26 Q100 29 100 39
+           C100 70 93 96 60 123
+           C27 96 20 70 20 39
+           Q20 29 29 26 Z"
+        fill="none" stroke="url(#crestChampagne)" stroke-width="1" opacity="0.85"/>
 
-  <!-- monogram -->
-  <text x="60" y="83" text-anchor="middle"
+  <text x="46" y="86" text-anchor="middle"
         font-family="Cormorant Garamond, Georgia, serif" font-weight="600"
-        font-size="46" letter-spacing="2" fill="url(#crestSilver)">CS</text>
+        font-size="50" fill="url(#crestSilver)">C</text>
+  <text x="70" y="86" text-anchor="middle"
+        font-family="Cormorant Garamond, Georgia, serif" font-weight="600"
+        font-size="44" fill="url(#crestSilver)">S</text>
+
+  <path d="M60 24 L63 30 L60 36 L57 30 Z" fill="url(#crestChampagne)" opacity="0.9"/>
+
+  <circle cx="60" cy="143.5" r="2.1" fill="url(#crestChampagne)"/>
 </svg>
