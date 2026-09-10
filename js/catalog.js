@@ -35,16 +35,16 @@ const CATALOG = {
     // navy is the atelier photograph; the other colours are the same
     // garment with the cloth re-tinted (shirt, tie and form untouched)
     available: [
-      "base-sb2-navy.png", "base-sb2-charcoal.png", "base-sb2-black.png", "base-sb2-grey.png",
-      "base-sb2-brown.png", "base-sb2-burgundy.png", "base-sb2-olive.png", "base-sb2-cream.png"
+      "base-sb2-navy.webp", "base-sb2-charcoal.webp", "base-sb2-black.webp", "base-sb2-grey.webp",
+      "base-sb2-brown.webp", "base-sb2-burgundy.webp", "base-sb2-olive.webp", "base-sb2-cream.webp"
     ],
     // `optional` layers are skipped silently when their image is missing;
     // a missing base falls back to the illustrated preview.
     stack: [
-      { id: "base", file: "base-{style}-{color}.png" },
-      { id: "vest", file: "vest-{color}.png", optional: true, when: (d) => d.vest === "vest" },
-      { id: "lapel", file: "lapel-{lapel}-{style}-{color}.png", optional: true },
-      { id: "pockets", file: "pockets-{pockets}-{color}.png", optional: true }
+      { id: "base", file: "base-{style}-{color}.webp" },
+      { id: "vest", file: "vest-{color}.webp", optional: true, when: (d) => d.vest === "vest" },
+      { id: "lapel", file: "lapel-{lapel}-{style}-{color}.webp", optional: true },
+      { id: "pockets", file: "pockets-{pockets}-{color}.webp", optional: true }
     ]
   },
 

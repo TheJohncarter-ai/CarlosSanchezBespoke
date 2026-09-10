@@ -33,6 +33,7 @@
   <meta property="og:image" content="https://carlossanchezbespoke.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Carlos Sanchez Bespoke crest and wordmark on a dark navy ground" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="es_CO" />
   <meta property="og:locale:alternate" content="fr_FR" />
@@ -41,6 +42,8 @@
   <meta name="twitter:title" content="Carlos Sanchez Bespoke — Custom Suits, Handmade in Medellín" />
   <meta name="twitter:description" content="Design every detail of your bespoke suit online and submit your measurements. Handcrafted in Medellín, Colombia." />
   <meta name="twitter:image" content="https://carlossanchezbespoke.com/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="Carlos Sanchez Bespoke crest and wordmark on a dark navy ground" />
+  <meta name="author" content="Carlos Sanchez" />
 
   <!-- Brand typography (self-hosted — no third-party requests) -->
   <link rel="preload" href="assets/fonts/CormorantGaramond-600-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -79,13 +82,73 @@
     },
     "knowsLanguage": ["en", "es", "fr", "it"],
     "sameAs": ["https://www.instagram.com/carlossanchezcouture/"],
+    "founder": {
+      "@type": "Person",
+      "@id": "https://carlossanchezbespoke.com/#carlos-sanchez",
+      "name": "Carlos Sanchez",
+      "jobTitle": "Master Tailor",
+      "description": "Third-generation master tailor continuing a bespoke tailoring tradition founded in Medellín in 1962.",
+      "worksFor": { "@id": "https://carlossanchezbespoke.com/#business" }
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Bespoke tailoring services",
+      "itemListElement": [
+        {
+          "@type": "OfferCatalog",
+          "name": "Cloth colours",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Navy bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Charcoal bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Black bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Light Grey bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Chocolate bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Burgundy bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Olive bespoke suit cloth" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Cream bespoke suit cloth" } }
+          ]
+        }
+      ]
+    },
     "makesOffer": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full bespoke suits", "description": "Personal paper pattern, hand cutting, two to three fittings." } },
+      {
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": "Full bespoke suits", "description": "Personal paper pattern, hand cutting, two to three fittings." },
+        "priceCurrency": "USD",
+        "price": "1200",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock",
+        "areaServed": "Worldwide",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CO" },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": { "@type": "QuantitativeValue", "minValue": 42, "maxValue": 56, "unitCode": "DAY" }
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 30,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn",
+          "refundType": "https://schema.org/ExchangeRefund"
+        }
+      },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding and ceremony tailoring", "description": "Morning coats, tuxedos and formalwear made to measure." } },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wardrobe consulting", "description": "Seasonal and travel wardrobes built to the client's life and climate." } }
     ]
   }
   </script>
+  <!--
+    hasMerchantReturnPolicy above reflects the FAQ's fit-adjustment policy
+    (30 days, unlimited alteration, no cash refund on cut cloth — modelled
+    here as an exchange/adjustment policy since Schema.org has no closer
+    match for made-to-order goods). Carlos should confirm the exact terms
+    before launch; update the matching FAQ entry (faq.q6/a6 in js/i18n.js)
+    at the same time so the on-page text and the structured data agree.
+  -->
 
   <!-- Structured data: website + FAQ -->
   <script type="application/ld+json">
@@ -126,6 +189,11 @@
         "@type": "Question",
         "name": "Do you make wedding suits and tuxedos?",
         "acceptedAnswer": { "@type": "Answer", "text": "Yes — wedding suits, tuxedos, morning coats and ceremony formalwear are a specialty, for grooms and full wedding parties, in Colombia and abroad." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is your deposit and fit-adjustment policy?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A 50% deposit begins your pattern, with the balance due at your final fitting. Because every garment is cut to your measurements, we don't offer cash refunds once cutting begins — but we do guarantee unlimited fit adjustments at no charge for 30 days after delivery, in person or by video fitting." }
       }
     ]
   }
@@ -318,7 +386,92 @@
       <p data-i18n="gallery.quote">"Style makes you unique — and so does clothing made to your measure."</p>
       <cite>— Carlos Sanchez</cite>
     </blockquote>
-  </section>
+  
+      <!-- ---- The Process ---- -->
+      <div class="process-strip">
+        <p class="eyebrow" data-i18n="process.eyebrow">How a suit is made</p>
+        <div class="process-steps">
+          <div class="process-step">
+            <span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#icoProcess1)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <defs><linearGradient id="icoProcess1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8d9b5"/><stop offset="1" stop-color="#b99a5f"/></linearGradient></defs>
+              <rect x="3" y="9" width="18" height="6" rx="1.2"/>
+              <path d="M6 9 V12 M9.5 9 V13 M13 9 V12 M16.5 9 V13"/>
+            </svg></span>
+            <h4 data-i18n="process.s1.title">Measure</h4>
+            <p data-i18n="process.s1.text">In the atelier or by guided video fitting — every number recorded twice.</p>
+          </div>
+          <div class="process-step">
+            <span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#icoProcess2)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <defs><linearGradient id="icoProcess2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8d9b5"/><stop offset="1" stop-color="#b99a5f"/></linearGradient></defs>
+              <path d="M4 20 L17 7"/><path d="M15 5 L19 9"/><circle cx="5.5" cy="18.5" r="2.4"/>
+            </svg></span>
+            <h4 data-i18n="process.s2.title">Pattern &amp; Cut</h4>
+            <p data-i18n="process.s2.text">A paper pattern drafted for you alone, then cut by hand from your chosen cloth.</p>
+          </div>
+          <div class="process-step">
+            <span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#icoProcess3)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <defs><linearGradient id="icoProcess3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8d9b5"/><stop offset="1" stop-color="#b99a5f"/></linearGradient></defs>
+              <circle cx="12" cy="5" r="1.6" fill="url(#icoProcess3)" stroke="none"/><line x1="12" y1="6.4" x2="12" y2="19"/>
+            </svg></span>
+            <h4 data-i18n="process.s3.title">Fittings</h4>
+            <p data-i18n="process.s3.text">Two to three fittings, pinned and adjusted in front of you until it sits right.</p>
+          </div>
+          <div class="process-step">
+            <span class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="url(#icoProcess4)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <defs><linearGradient id="icoProcess4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8d9b5"/><stop offset="1" stop-color="#b99a5f"/></linearGradient></defs>
+              <path d="M4 8 C4 6 6 5 9 5 L16 5 C18.5 5 20 6.8 20 9 C20 12.5 17 15.5 12 15.5 C8 15.5 5.5 14 4.6 11.5"/>
+              <path d="M4 8 L4.6 11.5"/><line x1="7" y1="18.5" x2="17" y2="18.5"/>
+            </svg></span>
+            <h4 data-i18n="process.s4.title">Finish</h4>
+            <p data-i18n="process.s4.text">Hand-finished buttonholes and a final press — ready in six to eight weeks.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Meet the Master Tailor ---- -->
+      <!-- Bio uses only facts already established elsewhere on the site (family
+           tradition since 1962, three generations, El Poblado atelier). Carlos
+           should review and personalize before launch — treat this as a first
+           draft, not a verified biography. Portrait: replace the workbench
+           photo below with a photo of Carlos himself when one is available;
+           until then we deliberately show his hands at work rather than
+           inventing a face. -->
+      <div class="tailor-bio">
+        <div class="tailor-portrait">
+          <picture>
+            <source srcset="assets/gallery/atelier-workbench-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/atelier-workbench-thumb.jpg" loading="lazy" decoding="async"
+                 width="750" height="1000"
+                 alt="Carlos Sanchez's workbench: sewing machine, shears, tape measure and swatch books" />
+          </picture>
+        </div>
+        <div class="tailor-bio-text">
+          <p class="eyebrow" data-i18n="tailor.eyebrow">The Master Tailor</p>
+          <h3 data-i18n="tailor.name">Carlos Sanchez</h3>
+          <p data-i18n="tailor.bio">
+            Carlos leads the third generation of a tailoring house his family began in
+            1962. He learned the trade in the same El Poblado workshop where he now
+            drafts every house pattern by hand, and personally reviews each fitting
+            before a suit leaves the atelier.
+          </p>
+          <p class="tailor-signoff" data-i18n="tailor.signoff">— Founder &amp; Master Tailor, Carlos Sanchez Bespoke</p>
+        </div>
+      </div>
+
+      <!-- ---- Press & client words — disabled until real content exists ----
+           This section is intentionally NOT rendered: it holds no fabricated
+           quotes or logos. Populate js/testimonials.js (see the template
+           there) with real client testimonials and press logos, then remove
+           `hidden` below and set `data-i18n` copy for the eyebrow/title. -->
+      <div class="press-strip" id="pressStrip" hidden>
+        <p class="press-label" data-i18n="press.asSeenIn">As seen in</p>
+        <div class="press-logos" id="pressLogos"></div>
+      </div>
+      <div class="testimonials" id="testimonials" hidden>
+        <p class="eyebrow" data-i18n="testimonials.eyebrow">Client Sittings</p>
+        <div class="testimonial-grid" id="testimonialGrid"></div>
+      </div>
+</section>
 
   <!-- ============ GALLERY ============ -->
   <section class="section section-alt" id="gallery">
@@ -328,33 +481,51 @@
 
       <div class="gallery-grid">
         <figure class="gallery-item" data-full="assets/gallery/checked-jackets.jpg">
-          <img src="assets/gallery/checked-jackets.jpg" loading="lazy"
-               alt="Three custom checked sport jackets on mannequins: brown gun-club check, camel windowpane, and blue glen plaid" />
+          <picture>
+            <source srcset="assets/gallery/checked-jackets-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/checked-jackets-thumb.jpg" loading="lazy" decoding="async"
+                 width="820" height="851" alt="Three custom checked sport jackets on mannequins: brown gun-club check, camel windowpane, and blue glen plaid" />
+          </picture>
           <figcaption data-i18n="gallery.c1">Checked jackets, cut by hand</figcaption>
         </figure>
         <figure class="gallery-item" data-full="assets/gallery/burgundy-db.jpg">
-          <img src="assets/gallery/burgundy-db.jpg" loading="lazy"
-               alt="Burgundy double-breasted jacket with peak lapels and gold buttons, worn with khaki trousers" />
+          <picture>
+            <source srcset="assets/gallery/burgundy-db-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/burgundy-db-thumb.jpg" loading="lazy" decoding="async"
+                 width="820" height="1160" alt="Burgundy double-breasted jacket with peak lapels and gold buttons, worn with khaki trousers" />
+          </picture>
           <figcaption data-i18n="gallery.c2">Double-breasted burgundy, 6×2</figcaption>
         </figure>
         <figure class="gallery-item" data-full="assets/gallery/pinstripe-db.jpg">
-          <img src="assets/gallery/pinstripe-db.jpg" loading="lazy"
-               alt="Grey pinstripe double-breasted suit beside the pinstripe cloth swatch it was cut from" />
+          <picture>
+            <source srcset="assets/gallery/pinstripe-db-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/pinstripe-db-thumb.jpg" loading="lazy" decoding="async"
+                 width="820" height="820" alt="Grey pinstripe double-breasted suit beside the pinstripe cloth swatch it was cut from" />
+          </picture>
           <figcaption data-i18n="gallery.c3">From swatch to suit — grey pinstripe</figcaption>
         </figure>
         <figure class="gallery-item" data-full="assets/gallery/three-piece.jpg">
-          <img src="assets/gallery/three-piece.jpg" loading="lazy"
-               alt="Blue three-piece suit and brown houndstooth three-piece suit surrounded by fabric swatches" />
+          <picture>
+            <source srcset="assets/gallery/three-piece-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/three-piece-thumb.jpg" loading="lazy" decoding="async"
+                 width="820" height="1025" alt="Blue three-piece suit and brown houndstooth three-piece suit surrounded by fabric swatches" />
+          </picture>
           <figcaption data-i18n="gallery.c4">Three-piece suits, made to measure</figcaption>
         </figure>
         <figure class="gallery-item" data-full="assets/gallery/atelier-workbench.jpg">
-          <img src="assets/gallery/atelier-workbench.jpg" loading="lazy"
-               alt="Vintage sewing machine with thread spools, measuring tape, shears and fabric swatch books in the atelier" />
+          <picture>
+            <source srcset="assets/gallery/atelier-workbench-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/atelier-workbench-thumb.jpg" loading="lazy" decoding="async"
+                 width="750" height="1000" alt="Vintage sewing machine with thread spools, measuring tape, shears and fabric swatch books in the atelier" />
+          </picture>
           <figcaption data-i18n="gallery.c5">The workbench — cloth books and thread</figcaption>
         </figure>
         <figure class="gallery-item" data-full="assets/gallery/navy-blazer.jpg">
-          <img src="assets/gallery/navy-blazer.jpg" loading="lazy"
-               alt="Navy blazer worn open over a white shirt with khaki chinos, in front of the Carlos Sanchez crest" />
+          <picture>
+            <source srcset="assets/gallery/navy-blazer-thumb.webp" type="image/webp" />
+            <img src="assets/gallery/navy-blazer-thumb.jpg" loading="lazy" decoding="async"
+                 width="820" height="820" alt="Navy blazer worn open over a white shirt with khaki chinos, in front of the Carlos Sanchez crest" />
+          </picture>
           <figcaption data-i18n="gallery.c6">Navy blazer, worn easy</figcaption>
         </figure>
       </div>
@@ -667,6 +838,10 @@
           <summary data-i18n="faq.q5">Do you make wedding suits and tuxedos?</summary>
           <p data-i18n="faq.a5">Yes — wedding suits, tuxedos, morning coats and ceremony formalwear are a specialty, for grooms and full wedding parties, in Colombia and abroad.</p>
         </details>
+        <details class="faq-item">
+          <summary data-i18n="faq.q6">What is your deposit and fit-adjustment policy?</summary>
+          <p data-i18n="faq.a6">A 50% deposit begins your pattern, with the balance due at your final fitting. Because every garment is cut to your measurements, we don't offer cash refunds once cutting begins — but we do guarantee unlimited fit adjustments at no charge for 30 days after delivery, in person or by video fitting.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -735,6 +910,7 @@
 
   <script src="js/i18n.js"></script>
   <script src="js/catalog.js"></script>
+  <script src="js/testimonials.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -33,9 +33,16 @@ Photograph / Illustration toggle so the client can still see their exact cut.
 
 ## Export specs
 
-- PNG with **transparent background** (background removed).
+- PNG with **transparent background** (background removed) as your working master.
 - 1,200 × 1,560 px (10:13), garment centred, identical position in every file.
-- Keep total per-file size reasonable (< 400 KB; export at 80–90% quality).
+- **Convert the final PNG to WebP before adding it to this folder** — the site
+  only ever requests `.webp` (see `js/catalog.js`'s `available` list and
+  `stack[].file` patterns, both end in `.webp`, not `.png`). WebP shrinks
+  these photos by ~85–90% with no visible quality loss versus the 300+ KB
+  PNGs we started with. Any image editor or `cwebp`/Squoosh/Pillow can do
+  the conversion — quality 85–90 with alpha preserved is right for this.
+- Keep the PNG master too — drop it in `source-png/` (not served to
+  visitors, just kept as an editable original) rather than deleting it.
 
 ## MVP shot list — one navy suit, 8 photos
 

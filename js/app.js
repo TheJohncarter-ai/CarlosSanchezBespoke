@@ -186,6 +186,7 @@
     renderCatalogUI();
     renderSummary();
     renderMeasurements();
+    renderTestimonialsAndPress();
   }
 
   /* ---------------- customizer ---------------- */
@@ -466,10 +467,10 @@
   function findBasePhoto() {
     const pl = CATALOG.photoLayers;
     if (!pl || !pl.enabled || !pl.available) return null;
-    const exact = `base-${design.style}-${design.color}.png`;
+    const exact = `base-${design.style}-${design.color}.webp`;
     if (pl.available.includes(exact)) return { name: exact, approx: false };
     for (const st of ["sb2", "sb3", "db"]) {
-      const n = `base-${st}-${design.color}.png`;
+      const n = `base-${st}-${design.color}.webp`;
       if (pl.available.includes(n)) return { name: n, approx: true };
     }
     return null;
@@ -527,7 +528,7 @@
     const pl = CATALOG.photoLayers;
     if (!pl || !pl.enabled || !pl.available) return null;
     for (const name of pl.available) {
-      const m = name.match(/^base-([a-z0-9]+)-([a-z0-9]+)\.png$/);
+      const m = name.match(/^base-([a-z0-9]+)-([a-z0-9]+)\.webp$/);
       if (m) return { style: m[1], color: m[2] };
     }
     return null;
@@ -1239,6 +1240,49 @@
       touchX = null;
       if (Math.abs(dx) > 40) show(dx < 0 ? index + 1 : index - 1);
     }, { passive: true });
+  }
+
+  /* ---------------- testimonials + press (only render with real content) ---------------- */
+
+  function renderTestimonialsAndPress() {
+    const list = window.TESTIMONIALS || [];
+    const grid = $("#testimonialGrid");
+    const section = $("#testimonials");
+    if (grid && section) {
+      if (list.length) {
+        grid.innerHTML = list
+          .map((item) => {
+            const quote = (item.quote && (item.quote[lang] || item.quote.en)) || "";
+            return `<div class="testimonial-card">
+              <p class="quote">“${escapeHtml(quote)}”</p>
+              <p class="attribution">${escapeHtml(item.attribution || "")}</p>
+            </div>`;
+          })
+          .join("");
+        section.hidden = false;
+      } else {
+        section.hidden = true;
+      }
+    }
+
+    const press = window.PRESS_MENTIONS || [];
+    const logos = $("#pressLogos");
+    const strip = $("#pressStrip");
+    if (logos && strip) {
+      if (press.length) {
+        logos.innerHTML = press
+          .map((p) => {
+            const img = `<img src="${escapeHtml(p.logo)}" alt="${escapeHtml(p.name || "")}" loading="lazy" />`;
+            return p.url
+              ? `<a href="${escapeHtml(p.url)}" target="_blank" rel="noopener">${img}</a>`
+              : img;
+          })
+          .join("");
+        strip.hidden = false;
+      } else {
+        strip.hidden = true;
+      }
+    }
   }
 
   function bindReveal() {

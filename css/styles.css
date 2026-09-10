@@ -356,6 +356,27 @@ body::after {
   will-change: transform;
 }
 
+/* WebP progressive enhancement — ~35% lighter than the JPEG fallback above.
+   Kept as a separate @supports rule so browsers without image-set() keep
+   the plain JPEG layer instead of silently losing the background. */
+@supports (background-image: image-set(url("x.webp") type("image/webp") 1x)) {
+  .hero::before,
+  .photo-band {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 30% -20%, rgba(47, 95, 208, 0.35), transparent 55%),
+      linear-gradient(180deg, rgba(10, 20, 36, 0.84) 0%, rgba(10, 20, 36, 0.92) 70%, #0b1526 100%),
+      image-set(url("../assets/gallery/checked-jackets.webp") type("image/webp") 1x,
+                url("../assets/gallery/checked-jackets.jpg") type("image/jpeg") 1x);
+  }
+  .photo-band {
+    background-image:
+      linear-gradient(rgba(10, 20, 36, 0.78), rgba(10, 20, 36, 0.88)),
+      image-set(url("../assets/gallery/atelier-workbench.webp") type("image/webp") 1x,
+                url("../assets/gallery/atelier-workbench.jpg") type("image/jpeg") 1x);
+  }
+}
+
 @keyframes heroDrift {
   from { transform: scale(1) translateY(0); }
   to   { transform: scale(1.09) translateY(-1.5%); }
@@ -498,6 +519,147 @@ body::after {
 }
 
 .service-card p { color: var(--ink-soft); font-size: 0.93rem; }
+
+/* ---------- process strip ---------- */
+.process-strip { margin-top: 5rem; }
+
+.process-strip > .eyebrow { text-align: center; justify-content: center; display: flex; }
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.4rem;
+  margin-top: 1.6rem;
+  position: relative;
+}
+
+.process-steps::before {
+  content: "";
+  position: absolute;
+  top: 23px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 1px;
+  background: var(--hairline);
+  z-index: 0;
+}
+
+.process-step {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: grid;
+  justify-items: center;
+}
+
+.process-step .service-icon { margin-bottom: 1rem; background: var(--paper); }
+
+.process-step h4 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-bottom: 0.4rem;
+  color: var(--silver-light);
+}
+
+.process-step p { color: var(--ink-soft); font-size: 0.85rem; max-width: 21ch; }
+
+/* ---------- master tailor bio ---------- */
+.tailor-bio {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2.6rem;
+  align-items: center;
+  margin-top: 5.5rem;
+  padding-top: 4rem;
+  border-top: 1px solid var(--line);
+}
+
+.tailor-portrait {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid rgba(217, 197, 154, 0.28);
+  box-shadow: 0 24px 56px rgba(4, 8, 18, 0.4);
+}
+
+.tailor-portrait img { aspect-ratio: 3 / 4; object-fit: cover; }
+
+.tailor-bio-text h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.1rem;
+  margin: 0.3rem 0 1rem;
+}
+
+.tailor-bio-text p:not(.tailor-signoff) {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 42rem;
+}
+
+.tailor-signoff {
+  margin-top: 1.2rem;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--champagne);
+}
+
+/* ---------- press strip + testimonials (built, disabled until real content exists) ---------- */
+.press-strip { margin-top: 4.5rem; text-align: center; }
+
+.press-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 1.2rem;
+}
+
+.press-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  opacity: 0.6;
+  filter: grayscale(1);
+}
+.press-logos img { height: 28px; width: auto; }
+
+.testimonials { margin-top: 4.5rem; }
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+
+.testimonial-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--r-md);
+  padding: 1.6rem;
+}
+
+.testimonial-card p.quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--silver-light);
+  margin-bottom: 1rem;
+}
+
+.testimonial-card .attribution { font-size: 0.8rem; color: var(--champagne); }
+
+@media (max-width: 820px) {
+  .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+  .process-steps::before { display: none; }
+  .tailor-bio { grid-template-columns: 1fr; }
+  .tailor-portrait { max-width: 320px; margin: 0 auto; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .press-logos { gap: 1.6rem; }
+}
 
 /* ---------- gallery ---------- */
 .photo-band {
